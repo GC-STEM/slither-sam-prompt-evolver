@@ -1,62 +1,274 @@
-START task_name
+START slither_sam_prompt_evolver
 
     # === Purpose and Assumptions ===
-    # TODO: Summarize the responsibility of this pseudocode and any assumptions,
-    # preconditions, or requirements it realizes.
+    # Optimize strategy prompts, never the fixed context or generated source.
+    # Planned algorithm; no implementation or executed result is claimed.
+    # Isolation and game-profile parity must be verified before running bots.
 
     # === Inputs ===
-    # TODO: Identify input values, sources, expected types/formats, and validation rules.
+    # Command, validated JSON configuration, frozen baseline strategy,
+    # provider/model settings and operator credentials for live modes only,
+    # versioned game/API context, opponents, seeds, and finite limits.
+    # Guided and replay inputs are validated recorded bundles.
 
     # === Outputs ===
-    # TODO: Identify outputs, destinations, formats, and required postconditions.
+    # Durable manifests, raw generations, slot records, prompt lineage,
+    # actual cost/usage status, checkpoints, and honest comparison reports.
 
     # === Constants and Configuration ===
-    # TODO: Define named constants and configuration values used by the algorithm.
-    # Example: LET MAX_RETRIES = 3
+    LET WIN_CREDIT = 1
+    LET NONWIN_CREDIT = 0
+    LET SCORING_VERSION = 1
+    LET OVERALL_WEIGHT = config.overall_weight  # proposed starting value 0.70
+    LET WORST_WEIGHT = config.worst_weight      # proposed starting value 0.30
+    LET P = config.population_size
+    LET G = config.generation_count  # includes initial generation zero
+    LET K = config.samples_per_prompt
+    # Numeric workload, deadlines, memory, and cost values are pilot decisions.
 
     # === Data Types and Structures ===
-    # TODO: Define important records, collections, structures, or abstract data types
-    # needed to understand the algorithm.
+    # RunConfig: fixed context, mode, limits, opponents and disjoint seed sets.
+    # Prompt: strategy text/hash, parent IDs, generation and operation log.
+    # Sample: prompt/sample ID, original response, source/hash and validity.
+    # Slot: sample/opponent/seed/profile/phase with one terminal outcome.
+    # Ledger: reservations, confirmed costs and uncertain charge bounds.
+    # Checkpoint: compatible manifest hash, completed IDs and search RNG state.
 
-    # === Classes / Components ===
-    # TODO: Describe class or component responsibilities at a language-independent level.
-    # Delete this section if the design is procedural or classes are not relevant.
+    # === Components ===
+    # CLI/configuration, provider/budget adapter, coordinator/scheduler,
+    # validation/isolated runner, scoring/evolution, store/reporting,
+    # guided import/replay. Trusted game code alone determines outcomes.
 
     # === Helper Functions / Procedures ===
-    # TODO: Define helper operations. For each, state parameters, return/output values,
-    # preconditions, postconditions, and exceptional behavior when relevant.
+
+    FUNCTION obtain_sample(prompt, sample_index, phase)
+        # Return saved compatible sample or make one bounded request.
+        IF compatible_saved_sample_exists(prompt, sample_index, phase)
+            RETURN saved_sample
+        END IF
+        IF paid_request_guard_fails() OR elapsed_time_guard_fails()
+            RETURN stopped
+        END IF
+        LET request = build_request(prompt, sample_index, phase, fixed_context)
+        LET bound = conservative_request_cost_bound(request)
+        IF bound is unknown
+            RETURN blocked_unknown_cost
+        END IF
+        IF remaining_request_capacity < 1 OR bound > remaining_cost_capacity
+            RETURN stopped
+        END IF
+        LET reservation = reserve_and_persist(bound, request.id)
+        # Reservation must exist before sending. Do not release uncertain costs.
+        LET response = provider_generate(request, operator_secret)
+        IF response.status == uncertain OR response.status == provider_failure
+            persist_request_status(response, reservation)
+            RETURN blocked_infrastructure
+        END IF
+        reconcile_or_retain_reservation(response.usage, reservation)
+        persist_original_response(response)
+        LET sample = extract_and_validate(response, fixed_api)
+        persist_sample(sample)
+        # Do not repair source, add strategy, or grant free replacement samples.
+        RETURN sample
+    END FUNCTION
+
+    FUNCTION evaluate_prompt(prompt, phase, seeds)
+        LET schedule = create_equal_schedule(prompt, K, opponents, seeds, profile)
+        persist_schedule(schedule)
+        FOR sample_index FROM 0 TO K - 1
+            LET sample = obtain_sample(prompt, sample_index, phase)
+            IF sample is stopped OR sample is blocked
+                RETURN incomplete
+            END IF
+            FOR EACH slot IN schedule_for_sample(sample_index)
+                IF slot_has_terminal_record(slot.id)
+                    CONTINUE
+                END IF
+                IF elapsed_time_guard_fails()
+                    checkpoint_completed_work()
+                    RETURN incomplete
+                END IF
+                IF sample.status == invalid_bot
+                    # Synthetic failure exposure; this match was not played.
+                    append_terminal(slot, synthetic_invalid_generation, NONWIN_CREDIT)
+                    CONTINUE
+                END IF
+                LET result = isolated_runner.evaluate(sample, slot)
+                IF result.status == engine_failure OR result.status == isolation_failure
+                    append_blocked_event(slot, result)
+                    checkpoint_completed_work()
+                    RETURN incomplete
+                END IF
+                # Legal played outcomes: win, loss, draw.
+                # Bot exception/invalid action/decision timeout: bot-caused loss.
+                # Game-frame cap with no winner: draw in this versioned profile.
+                append_one_terminal_record(slot, result)
+                checkpoint_completed_work()
+            END FOR
+        END FOR
+        IF schedule_has_missing_or_blocked_slots(schedule)
+            RETURN incomplete
+        END IF
+        RETURN score_complete_schedule(schedule)
+    END FUNCTION
+
+    FUNCTION score_complete_schedule(schedule)
+        REQUIRE every scheduled slot is scoreable and has one terminal record
+        LET total_wins = 0
+        LET total_slots = 0
+        LET worst_rate = 1
+        FOR EACH opponent_profile IN schedule.opponent_profiles
+            LET N = count_scheduled_slots(opponent_profile)
+            REQUIRE N > 0
+            LET W = count_terminal_wins(opponent_profile)
+            # Draws, bot losses, and synthetic invalid generations have zero wins.
+            LET rate = W / N
+            LET total_wins = total_wins + W
+            LET total_slots = total_slots + N
+            LET worst_rate = minimum(worst_rate, rate)
+            record_played_and_synthetic_counts_separately(opponent_profile)
+        END FOR
+        LET overall_rate = total_wins / total_slots
+        LET fitness = OVERALL_WEIGHT * overall_rate + WORST_WEIGHT * worst_rate
+        RETURN fitness_with_full_denominators(fitness, schedule)
+    END FUNCTION
+
+    FUNCTION next_population(ranked_population, search_rng)
+        LET children = unchanged_elites(ranked_population, config.elite_count)
+        WHILE count(children) < P
+            LET parent_a = seeded_tournament_select(ranked_population, search_rng)
+            IF seeded_operation_choice(search_rng) == mutation
+                LET candidate = mutate_one_allowed_fragment(parent_a, proposal_bank)
+                LET parents = [parent_a.id]
+            ELSE
+                LET parent_b = seeded_tournament_select(ranked_population, search_rng)
+                LET candidate = combine_strategy_fragments(parent_a, parent_b)
+                LET parents = [parent_a.id, parent_b.id]
+            END IF
+            IF candidate_is_valid_distinct_strategy(candidate, children)
+                append_child_with_lineage(children, candidate, parents)
+            ELSE
+                increment_population_attempt_count()
+                IF attempts >= config.max_population_attempts
+                    add_distinct_configured_seed_variants_if_available(children)
+                    IF count(children) < P
+                        RETURN population_construction_failure
+                    END IF
+                END IF
+            END IF
+        END WHILE
+        REQUIRE fixed_context_hash remains unchanged
+        RETURN children
+    END FUNCTION
 
     # === Main Processing Logic ===
-    # TODO: Write the algorithm in clear, language-independent steps.
-    # Use structured sequence, selection, and repetition.
-    # Use LET for assignment and keyboard comparison operators such as ==, !=, <=, >=, <, >.
+    LET command = parse_command()
+    LET config = validate_inputs(command)
+    IF invalid(config)
+        show_actionable_error()
+        RETURN invalid_input
+    END IF
 
-    # TODO: Add input-validation and boundary-handling logic where required.
+    IF command == guided
+        LET bundle = import_and_validate_manual_observations()
+        label_manual_provenance_and_unknown_seeds(bundle)
+        export_report(bundle)
+        RETURN completed
+    END IF
+    IF command == replay
+        LET bundle = verify_recorded_bundle()
+        display_inert_recorded_events_and_text(bundle)
+        # Never issue a model request or execute stored bot source here.
+        RETURN completed
+    END IF
+    IF command == report
+        verify_bundle_and_recalculate_report()
+        RETURN completed
+    END IF
 
-    # TODO: Add calls to helper functions/procedures and show how intermediate
-    # results are combined.
+    IF command == pilot
+        show_projected_requests_slots_time_and_cost_bounds(config)
+        IF command.live != true
+            RETURN planned
+        END IF
+        REQUIRE finite_operator_limits and verified_execution_environment
+        run_small_bounded_pilot_without_optimization_claims()
+        export_actual_pilot_measurements()
+        RETURN pilot_status
+    END IF
 
-    # TODO: Add output/reporting logic and ensure required postconditions are satisfied.
+    REQUIRE fixed_context and disjoint_optimization_holdout_seeds
+    REQUIRE finite_live_limits and verified_execution_environment
+    IF command == resume
+        LET state = restore_compatible_checkpoint()
+        REQUIRE ambiguous_paid_requests_are_reconciled_or_kept_reserved
+    ELSE
+        LET state = create_manifest_and_initial_population(config, baseline)
+    END IF
+
+    WHILE state.generation < G
+        FOR EACH prompt IN state.population
+            LET result = evaluate_prompt(prompt, optimization, optimization_seeds)
+            IF result is incomplete
+                persist_partial_report_with_no_final_incomplete_scores()
+                RETURN paused_or_stopped
+            END IF
+            persist_prompt_fitness(result)
+        END FOR
+        LET ranked = rank_by_fitness_validity_length_then_hash(state.population)
+        persist_generation_summary(ranked)
+        IF state.generation == G - 1
+            BREAK
+        END IF
+        LET new_population = next_population(ranked, state.search_rng)
+        IF new_population is population_construction_failure
+            persist_partial_report_and_reason()
+            RETURN stopped
+        END IF
+        LET state.population = new_population
+        LET state.generation = state.generation + 1
+        persist_search_rng_and_checkpoint(state)
+    END WHILE
+
+    LET selected = best_optimization_prompt()
+    freeze_selection_before_holdout(selected)
+    # Fresh generation samples for both prompt strategies, with equal schedules.
+    # If selected == baseline, evaluate one fresh set and report identical choice.
+    FOR EACH prompt IN distinct([baseline, selected])
+        LET holdout_result = evaluate_prompt(prompt, holdout, holdout_seeds)
+        IF holdout_result is incomplete
+            export_report_labeled_holdout_incomplete()
+            RETURN paused_or_stopped
+        END IF
+        persist_holdout_result_without_feeding_selection(holdout_result)
+    END FOR
+    verify_complete_bundle_and_export_baseline_comparison()
+    record_empirical_finding_as_improved_not_improved_or_inconclusive()
 
     # === Error / Exception / Recovery Logic ===
-    # TODO: Describe expected error conditions and the algorithm's response.
-    # Delete this section if all error handling is already clear in the main logic.
+    # Configuration errors: no requests or source execution.
+    # Invalid bot outputs: explicit zero-credit synthetic scheduled slots.
+    # Bot faults: played losses, with reason.
+    # Infrastructure/storage/isolation faults: pause; never artificial losses.
+    # Unknown request charge: reservation retained; do not automatically reissue.
+    # Changed context/profile: new run and baseline, never silent resume.
 
     # === Cleanup / Finalization ===
-    # TODO: Describe resource release, persistence, final state updates, or other cleanup.
-    # Delete this section if not applicable.
+    terminate_workers_and_close_disposable_browser()
+    persist_remaining_request_status_and_checkpoint()
+    release_transient_secret_references_without_exporting_them()
+    show_artifact_paths_and_honest_completion_status()
 
-END task_name
-
+END slither_sam_prompt_evolver
 
 # === Traceability ===
-# TODO: Identify the requirements and design sections implemented by this pseudocode.
-# Example: FR-001, FR-004; design.md#component-and-module-design
-
+# FR-001 through FR-022; NFR-001 through NFR-010.
+# Design: component contracts, scoring/search, run state, limits and recovery.
+# Test procedures: TC-001 through TC-032; all planned, Not run.
 
 # === References ===
-# TODO: Add reference entries in the citation style required by the course for any
-# external algorithms, standards, documentation, or other sources used.
-
-# TODO: Before submitting, replace placeholders, resolve all TODO prompts, and delete
-# unused sections and TODO comment lines.
+# Project SDLC and game bundle inspected at commit
+# 59536cf1030fd9ba04e893d046e317d8531b6529 on October 7, 2026.
+# https://github.com/GC-STEM/slither-sam-prompt-evolver
+# Original activity: https://aka.ms/slither-slam
+# Original educator resources: https://aka.ms/slither-slam-educator

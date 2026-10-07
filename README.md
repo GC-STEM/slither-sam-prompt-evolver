@@ -1,391 +1,110 @@
 # Slither Sam Prompt Evolver
 
-**Evolutionary prompt optimization for Slither Sam. Uses automated tournaments and fitness scoring to iteratively improve AI prompts that generate stronger game-playing strategies.**
+**An independent educational experiment in evolutionary prompt optimization for Microsoft's Slither Slam activity.**
 
-This repository is an experimental companion project for Microsoft's [Slither Slam](https://aka.ms/slither-slam) Hour of AI activity.
+This project asks: **Can an evolutionary algorithm improve the strategy prompt used to generate a SnakeBot?** It is planned as a supplement to an Hour of AI session in December 2026 and as an independent professional portfolio project.
 
-Slither Slam introduces artificial intelligence (AI), large language models (LLMs), prompt engineering, AI-assisted code generation, game AI, testing, and debugging through a competitive Snake-style game. Participants use natural-language prompts to generate code for a **SnakeBot** and then test their bot against other game-playing algorithms.
-
-**Slither Sam Prompt Evolver** extends that idea with a new question:
-
-> **Can we use an evolutionary algorithm to improve the prompt itself?**
-
-Instead of manually rewriting the prompt after each match, this project treats the prompt as something that can be **tested, scored, selected, mutated, combined, and improved across generations**.
-
----
+> [!IMPORTANT]
+> **Current status: requirements and design baseline.** The SDLC files describe planned software. Automated tournaments, live-provider integration, isolation, and recorded-session results still require implementation and verification. No experimental improvement or passing test results are claimed.
 
 ## Project Goals
 
-This project supplements the original Slither Slam activity by demonstrating how several AI and computer science concepts connect:
+- Explore prompt engineering, automated testing, fitness functions, evolutionary algorithms, and optimization.
+- Compare a frozen baseline with evolved strategy prompts under equal conditions.
+- Investigate generation variation, overfitting, and generalization using independent bot samples and withheld trials.
+- Demonstrate requirements, architecture, design, algorithms, construction planning, verification, and honest portfolio evidence.
 
-- **Prompt engineering** — Small changes to instructions can produce different generated programs.
-- **Automated testing** — Generated SnakeBots can be evaluated repeatedly under consistent conditions.
-- **Fitness functions** — Performance can be translated into a numerical score.
-- **Evolutionary algorithms** — Better-performing prompts can be selected and modified to create a new generation.
-- **Optimization** — Repeated testing can search a large space of possible prompts.
-- **Generalization** — A prompt should perform well against multiple opponents rather than exploiting one specific opponent.
-- **Overfitting** — Optimizing too closely against a fixed test environment can produce solutions that fail under different conditions.
-- **Reproducibility** — AI-generated outputs and game simulations may vary, so meaningful evaluation requires repeated trials and controlled experiments.
+A repeatable experiment with a well-supported negative or inconclusive finding can still be a successful project.
 
-The objective is not simply to produce the strongest possible SnakeBot. The project uses a game as a small, visible environment for exploring how **AI-generated software can be evaluated and iteratively improved**.
+## Initial Delivery Paths
 
----
+| Path | Intended Use | Model Credentials |
+| --- | --- | --- |
+| Automated prototype | Local Python command line coordinates generation, JavaScript matches, scoring and evolution; browser displays game behavior. | Supplied by whoever runs the experiment. |
+| Guided experiment | Participants revise prompts, observe trials, and compare documented results. | Not required for importing manual observations. |
+| Recorded replay | Facilitator displays real saved outcomes and trusted state events. | Not required; replay does not execute stored bot source. |
 
-## How It Works
+The first interface is a **local command line plus browser game**. A browser dashboard may be added later.
 
-At a high level, the experiment follows this cycle:
+## How the Experiment Works
 
-```text
-Population of prompts
-        │
-        ▼
-Large Language Model
-        │
-        ▼
-Generated SnakeBots
-        │
-        ▼
-Automated tournaments
-        │
-        ▼
-Performance measurements
-        │
-        ▼
-Fitness scores
-        │
-        ▼
-Select stronger prompts
-        │
-        ├───────────────┐
-        ▼               ▼
-    Mutation        Crossover
-        │               │
-        └───────┬───────┘
-                ▼
-       Next generation
-                │
-                └──────► Repeat
-```
+1. Run a small pilot and choose provider/model, workload, and finite spending/request limits.
+2. Freeze the baseline strategy, generation context, game/API profile, model settings, and scoring version.
+3. Generate multiple independent bot implementations for each strategy prompt.
+4. Validate outputs, evaluate equal opponent/seed schedules, and preserve failures and raw records.
+5. Score prompts, select parents, and create new strategies through mutation and crossover.
+6. Freeze the selected prompt and compare fresh generated samples with the baseline on withheld seeds.
+7. Export the actual evidence, costs, lineage, and limitations.
 
-The important experimental constraint is that the **prompt changes while the evaluation system remains controlled**.
-
-A candidate prompt is sent to the same LLM under the same experimental conditions. The generated SnakeBot is then tested through repeated matches against the Slither Slam opponents.
-
-Performance determines which prompts are more likely to contribute to the next generation.
-
----
-
-## Prompt Evolution
-
-The initial population may contain a baseline Slither Slam prompt plus several variations.
-
-After each generation, the system can create new prompts using operations analogous to biological evolution.
-
-### Selection
-
-Prompts that generate stronger SnakeBots receive higher fitness scores and are more likely to continue into the next generation.
-
-### Mutation
-
-A prompt can be changed slightly by:
-
-- adding or removing instructions,
-- changing priorities,
-- clarifying ambiguous instructions,
-- reorganizing constraints,
-- emphasizing defensive or offensive behavior, or
-- changing how the generated program should reason about the game state.
-
-### Crossover
-
-Useful instructions from two successful prompts can be combined to create a new candidate prompt.
-
-For example:
-
-```text
-Parent A
-├── Strong collision-avoidance instructions
-└── Weak food-selection strategy
-
-Parent B
-├── Weak collision-avoidance instructions
-└── Strong food-selection strategy
-
-              ↓
-
-Child Prompt
-├── Strong collision-avoidance instructions
-└── Strong food-selection instructions
-```
-
-The resulting prompt must still be tested. Combining two successful prompts does **not** guarantee a better result.
-
----
+The **strategy prompt** evolves. Generated bot source is evaluated and preserved; it is not directly evolved or silently repaired. This is evolutionary search, not GAN training.
 
 ## Fitness Function
 
-A fitness function converts tournament performance into a score that the evolutionary algorithm can optimize.
-
-An initial fitness function for this project is:
+The proposed starting formula is:
 
 ```text
-fitness =
-    (0.70 × overall_win_rate)
-    +
-    (0.30 × worst_opponent_win_rate)
+fitness = 0.70 × overall_effective_win_rate
+        + 0.30 × worst_opponent_effective_win_rate
 ```
 
-The **overall win rate** rewards generally strong performance.
+Effective rates use a complete scheduled-trial denominator. Invalid generated samples receive explicit zero-credit synthetic trial records. These records are distinguished from played games. Draws score zero; bot-caused failures and infrastructure faults are handled separately.
 
-The **worst-opponent win rate** discourages the evolutionary process from producing a strategy that dominates several opponents while consistently failing against another.
+For example, equal-schedule rates of 92%, 88%, 90%, and 20% produce a fitness of **0.5675**. This is an arithmetic example, not an experiment result. The complete versioned policy is in [Design](./docs/20_design.md#main-processing-flow).
 
-For example:
+## Avoiding Misleading Results
 
-```text
-Prompt A
+Use equal schedules, multiple generated samples, preserved source/configuration hashes, and a disjoint holdout set. Only optimization results influence selection. Fresh holdout generations help assess the prompt rather than only a saved winning bot.
 
-Opponent 1: 92%
-Opponent 2: 88%
-Opponent 3: 90%
-Opponent 4: 20%
+Saved-source replay can be reproducible even when the provider cannot reproduce identical generated source. Small pilots, reused elite samples, shared seeds, known opponents, and game-engine quirks limit what conclusions we can draw. A tournament score is evidence under the tested profile, not proof of correctness or optimal play.
 
-Overall win rate:        72.5%
-Worst-opponent win rate: 20.0%
+## Software Development Lifecycle
 
-Fitness:
-(0.70 × 0.725) + (0.30 × 0.20)
-= 0.5675
-```
+| Artifact | Purpose |
+| --- | --- |
+| [Overview](./docs/00_overview.md) | Problem, stakeholders, capabilities and observable success. |
+| [Requirements](./docs/10_requirements.md) | Stable requirements, acceptance criteria and traceability. |
+| [Design](./docs/20_design.md) | Contracts, records, algorithms, failures and configuration. |
+| [Architecture](./docs/21_architecture.md) | Components, trust boundaries and architectural decisions. |
+| [Editable diagrams](./docs/23_diagram.drawio) | Experiment flow and system boundaries. |
+| [Pseudocode](./docs/26_pseudocode.txt) | Language-independent control flow using LET. |
+| [Program Design Language](./docs/29_pdl.md) | Implementation-oriented refinement and invariants. |
+| [Construction plan](./docs/30_construction.md) | Incremental work, integration and quality gates. |
+| [Test plan](./docs/40_testing.md) | Planned procedures and required execution evidence. |
 
-The exact scoring system is experimental and may change as the project develops.
+Diagram previews: [experiment flow](./docs/23_diagram_flow.svg) and [system boundaries](./docs/23_diagram_architecture.svg). Text explanations remain available in the overview, architecture, design and pseudocode.
 
----
+## Getting Started
 
-## Avoiding Overfitting
+Start with the original [Slither Slam activity](https://aka.ms/slither-slam), then read the project overview and requirements. Runtime setup and executable commands will be published after implementation and pilot verification. Command names in the design documents are proposed interfaces, not currently verified instructions.
 
-Winning the training tournament does not necessarily mean that a prompt has discovered a generally effective strategy.
-
-An evolutionary system may eventually exploit:
-
-- predictable opponent behavior,
-- fixed starting conditions,
-- repeated random seeds,
-- characteristics of the scoring system, or
-- unintended properties of the game engine.
-
-For that reason, the project should separate **optimization matches** from additional evaluation conditions whenever practical.
-
-Potential approaches include:
-
-- randomized starting conditions,
-- multiple tournament runs,
-- unseen random seeds,
-- withheld evaluation matches, and
-- testing against opponents or configurations not used directly during optimization.
-
-The goal is to evolve prompts that produce **robust strategies**, not prompts that memorize one tournament.
-
----
-
-## What Are We Actually Optimizing?
-
-This distinction is important.
-
-We are **not directly evolving the SnakeBot source code**.
-
-We are evolving the **natural-language prompt used to ask an LLM to generate the SnakeBot**.
-
-```text
-Prompt
-  │
-  ▼
-LLM
-  │
-  ▼
-Program
-  │
-  ▼
-Game behavior
-  │
-  ▼
-Measured performance
-```
-
-The fitness signal therefore travels indirectly from game performance back to natural-language instructions.
-
-This creates an interesting optimization problem because a prompt does not directly specify every action the SnakeBot takes. Instead, it influences another AI system that generates the program that controls those actions.
-
----
-
-## What Should We Look For?
-
-The final winning prompt may be less interesting than **how the prompts change during evolution**.
-
-As generations improve, we can examine whether successful prompts become:
-
-- more specific,
-- more structured,
-- more defensive,
-- more strategic,
-- more explicit about planning,
-- better at describing priorities,
-- more effective at using the available game API, or
-- better at balancing competing objectives.
-
-We can also look for unexpected behavior.
-
-For example:
-
-> Does evolution produce a long and detailed prompt, or does it eventually discover that a shorter prompt works better?
-
-That is an empirical question. We should let the experiment answer it.
-
----
-
-## Hour of AI Extension
-
-This repository is intended as a supplement to an **Hour of AI session in December 2026**.
-
-Participants should first experience the original Slither Slam activity so they understand the connection between a prompt, generated code, and SnakeBot behavior.
-
-The extension then changes the perspective:
-
-```text
-Original Slither Slam
-
-Human
-  ↓
-writes prompt
-  ↓
-LLM generates code
-  ↓
-SnakeBot competes
-  ↓
-Human evaluates result
-  ↓
-Human revises prompt
-```
-
-This project explores:
-
-```text
-Slither Sam Prompt Evolver
-
-Evolutionary system
-  ↓
-creates prompts
-  ↓
-LLM generates code
-  ↓
-SnakeBots compete
-  ↓
-software measures results
-  ↓
-fitness function evaluates prompts
-  ↓
-system creates next generation
-```
-
-The same basic prompt-engineering loop remains, but part of the iterative improvement process becomes automated.
-
----
+The December session can use manual observations or genuine recorded results if live automation is unavailable. Those real bundles must be produced and reviewed during construction; synthetic fixtures cannot substitute for claimed experimental findings.
 
 ## Questions to Explore
 
-As you experiment with the project, consider questions such as:
+- Does evolution outperform the frozen baseline under withheld conditions?
+- Which strategy instructions change, and which changes help consistently?
+- How much variation comes from the prompt versus generated implementations?
+- Does a shorter strategy work as well as a longer one?
+- How do cost, sample count, opponents, and scoring choices affect conclusions?
+- Can another person reproduce the saved-bot results and explain the evidence?
 
-1. Does evolutionary optimization consistently outperform manual prompt engineering?
-2. How many generations are required before improvement begins to level off?
-3. Which types of prompt mutations are most useful?
-4. Do successful prompts become longer or shorter?
-5. Do independently evolved populations discover similar strategies?
-6. Does a prompt optimized for one LLM work well with another LLM?
-7. Does the best-performing prompt still perform well against previously unseen conditions?
-8. Can the evolutionary process discover useful instructions that a human prompt engineer did not consider?
-9. How much variation comes from the prompt versus the nondeterministic behavior of the LLM?
-10. What does "best prompt" actually mean when different generated programs can result from the same prompt?
+## Responsible Use and Contributing
 
-These questions turn a game tournament into a small experiment in **AI evaluation, optimization, and software engineering**.
+Treat AI-generated code as unverified. Execute it only after the project's isolation, resource-limit, and trusted-outcome checks pass. Keep credentials out of game processes and exports; do not collect participant personal data.
 
----
+When proposing changes, identify affected requirement/decision/test IDs and preserve **change the prompt, measure the result**. Changes to game rules, API, model, opponents, scoring or schedules require a new versioned comparison. Record individual contributions, reused sources and AI assistance, together with human verification.
 
-## Project Status
+## Original Activity and License
 
-> [!IMPORTANT]
-> **This repository is experimental and under active development.**
+- [Slither Slam student activity](https://aka.ms/slither-slam)
+- [Slither Slam educator resources](https://aka.ms/slither-slam-educator)
 
-The initial goal is to create a reproducible pipeline that can:
-
-1. maintain a population of candidate prompts,
-2. generate SnakeBot implementations from those prompts,
-3. run automated Slither Slam matches,
-4. record tournament results,
-5. calculate fitness scores,
-6. select successful prompts,
-7. generate a new population through mutation and crossover, and
-8. repeat the process for multiple generations.
-
-The design, scoring model, experiment parameters, and repository structure may change as we learn from early experiments.
-
----
-
-## Original Slither Slam Activity
-
-Before using this extension, explore the original Microsoft activity:
-
-- **Student activity:** [Slither Slam — VS Code for Education](https://aka.ms/slither-slam)
-- **Educator resources:** [Slither Slam Educator Resources](https://aka.ms/slither-slam-educator)
-
-Slither Slam is designed as an introductory AI and prompt-engineering experience in which learners generate a SnakeBot and compete against other AI-controlled snakes.
-
-This repository builds on those ideas for educational experimentation. It is not a replacement for the original activity.
-
----
-
-## Responsible Use
-
-AI-generated code should be treated as **unverified code**.
-
-Generated solutions may:
-
-- contain logical errors,
-- misunderstand the game API,
-- violate intended constraints,
-- perform differently across runs, or
-- appear successful because of weaknesses in the evaluation process.
-
-Tournament success is evidence of performance under the tested conditions—not proof that the generated program is correct, optimal, safe, or generally intelligent.
-
-Human review, testing, and critical evaluation remain essential parts of the experiment.
-
----
-
-## Contributing
-
-This project is currently being developed as an educational experiment.
-
-Contributions, experiments, alternative fitness functions, evaluation methods, and reproducibility improvements are welcome as the project matures.
-
-When proposing changes, try to preserve an important principle of the experiment:
-
-> **Change the prompt. Measure the result.**
-
-Changes to the game engine, opponents, scoring system, model configuration, or evaluation environment should be clearly identified because they can affect comparisons between prompt generations.
-
----
-
-## License
-
-Licensing information for this repository will be documented separately.
-
-Slither Slam and any Microsoft source code, assets, or instructional materials incorporated into or referenced by this project remain subject to their respective licenses and terms.
-
----
+The inspected repository contains a Microsoft MIT [LICENSE](./LICENSE). Preserve applicable notices when copying/adapting that source. Check separate terms for external materials, assets and services before incorporation. This project does not claim that a root notice licenses every externally referenced resource.
 
 ## Acknowledgements
 
-This project would not exist without **Microsoft's Hour of AI and Visual Studio Code for Education teams**, whose Slither Slam activity provides the game, learning experience, and inspiration for this experiment.
+Thank you to **Microsoft's Hour of AI and Visual Studio Code for Education teams** for the original Slither Slam learning experience and resources.
 
-Special thanks to **Ben Villalobos**, creator of Slither Slam, for developing an approachable and engaging activity that connects artificial intelligence, prompt engineering, code generation, game AI, testing, and debugging.
+Special thanks to **Ben Villalobos**, creator of Slither Slam, for the approachable activity that inspired this experiment.
 
-**Slither Sam Prompt Evolver is an independent educational extension of the Slither Slam activity and is not an official Microsoft project.**
+**Slither Sam Prompt Evolver is an independent educational extension and is not an official Microsoft project.**

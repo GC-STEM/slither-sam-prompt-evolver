@@ -1,235 +1,135 @@
-# {{IT-140}} {{Task Code}} | Software Solution Overview
+# Slither Sam Prompt Evolver | Software Solution Overview
 
-<!--
-This document provides a concise, nontechnical overview of the software solution.
-
-Write for a reader who may not have a software development background. Focus on
-what problem the software addresses, what the software does, and how the major
-parts of the solution work together.
-
-Use plain language whenever possible. Avoid implementation details unless they
-are necessary to understand the solution.
--->
+**Document status:** Initial design baseline, version 0.1.0. Describes planned software; implementation and execution evidence are not claimed.
 
 <!-- omit from toc -->
 ## Table of Contents
 
-<!-- TODO: Generate or update the table of contents after the document is complete. -->
+- [Problem or Need](#problem-or-need)
+- [Solution Purpose](#solution-purpose)
+- [Users and Stakeholders](#users-and-stakeholders)
+- [Solution Overview](#solution-overview)
+- [Inputs](#inputs)
+- [Processing](#processing)
+- [Outputs](#outputs)
+- [Major Workflow](#major-workflow)
+- [Assumptions and Constraints](#assumptions-and-constraints)
+- [Success Criteria](#success-criteria)
+- [Related Documents](#related-documents)
+- [References](#references)
 
 ## Problem or Need
 
-<!--
-TODO: Describe the problem, need, or opportunity the software addresses.
+Manual prompt improvement can be difficult to evaluate. One lucky game or one unusually strong generated program can make a prompt appear better than it is. Learners and portfolio reviewers need a clear way to see what changed, how it was tested, and what the evidence supports.
 
-Explain:
-* What problem exists?
-* Who experiences the problem?
-* Why is solving the problem useful or important?
-
-Describe the problem without assuming a particular technical solution.
--->
+The project also needs a dependable December 2026 Hour of AI extension. Live model requests may be slow, costly, or unavailable during a session, so the learning experience must also work with guided trials and recorded evidence.
 
 ## Solution Purpose
 
-<!--
-TODO: Explain the purpose of the proposed software solution.
+Slither Sam Prompt Evolver will compare prompts that ask an LLM to generate a SnakeBot for Microsoft's Slither Slam game. An evolutionary search will select and change strategy instructions, generate bots, and measure their performance against a fixed evaluation schedule.
 
-In one or two short paragraphs, summarize:
-* What the software is intended to accomplish.
-* How it addresses the problem or need described above.
-* What value the completed solution provides.
--->
+The project will also demonstrate the SDLC through a professional portfolio: requirements, design decisions, algorithms, planned tests, and eventually genuine execution evidence. A functioning experiment is useful even if evolution does not improve the prompt.
 
 ## Users and Stakeholders
 
-<!--
-TODO: Identify the people, groups, organizations, or systems that use, depend on,
-support, or are otherwise affected by the software.
-
-For a simple project, a short bulleted list may be sufficient.
--->
-
 | User or Stakeholder | Role or Need |
 | --- | --- |
-| `<user or stakeholder>` | `<how they use or are affected by the software>` |
+| Independent project developer | Builds and maintains the experiment and explains technical decisions. |
+| Experiment operator | Supplies credentials, selects limits, runs the pilot, and reviews costs and results. |
+| Instructor Mike / session facilitator | Uses a guided exercise or recorded demonstration during Hour of AI. |
+| Participants | Explore the relationship between prompts, generated code, tests, and performance. |
+| Portfolio reviewer | Examines traceability, reproducibility, honest findings, and the developer's contribution. |
+| Microsoft and original creator Ben Villalobos | Receive attribution and preservation of applicable source notices. |
 
 ## Solution Overview
 
-<!--
-TODO: Describe what the software does from the user's or stakeholder's perspective.
-
-Focus on the major capabilities of the solution rather than individual functions,
-classes, algorithms, or implementation details.
-
-A reader should be able to understand the overall solution after reading this section.
--->
-
 ### Major Capabilities
 
-<!--
-TODO: List the major things the software allows a user or another system to do.
-
-Keep these statements at a high level. More detailed requirements belong in
-10_requirements.md when that document is used.
--->
-
-* `<Major capability>`
-* `<Major capability>`
-* `<Major capability>`
+- Run a small pilot before selecting provider, model, and spending settings.
+- Run automated prompt generations from a local command line and view game behavior in a browser.
+- Collect manual trials or replay recorded results without model credentials.
+- Compare a frozen baseline with evolved prompts and export readable evidence.
+- Preserve decisions, lineage, failures, and limitations for portfolio review.
 
 ## Inputs
 
-<!--
-TODO: Identify the important information or other inputs the software receives.
-
-Inputs may come from:
-* Users
-* Files
-* Databases
-* Devices or sensors
-* APIs or other software
-* The operating system or environment
-
-Describe the information, not the programming-language variable used to store it.
--->
-
 | Input | Source | Purpose |
 | --- | --- | --- |
-| `<input>` | `<where it comes from>` | `<why the software needs it>` |
+| Baseline and candidate strategy prompts | Project files or operator | Define the instructions being compared. |
+| Frozen game/API and system instructions | Versioned Slither Slam source | Keep generation and evaluation contracts consistent. |
+| Provider, model, and budget configuration | Experiment operator after pilot | Select services and bound work and spending. |
+| Opponents, seeds, and match settings | Versioned experiment profile | Create equal test conditions. |
+| Manual observations or recorded bundles | Guided participants / previous real runs | Support the session without live generation. |
 
 ## Processing
 
-<!--
-TODO: Explain, in plain language, the major work the software performs.
-
-Describe the important steps, decisions, calculations, transformations, or
-interactions without reproducing detailed pseudocode or source code.
-
-For a simple program, this may be a short numbered list.
--->
-
-1. `<Major processing step>`
-2. `<Major processing step>`
-3. `<Major processing step>`
+1. Validate configuration and record the experiment's fixed conditions.
+2. Generate several independent bots from each prompt and validate their interface.
+3. Run equal scheduled trials and record outcomes and failures.
+4. Score prompts, retain selected strategies, and produce new prompts through mutation and crossover.
+5. Freeze the selected prompt and compare fresh bot samples with the baseline on withheld conditions.
+6. Export the evidence and its limitations; display existing records when live work is unsuitable.
 
 ## Outputs
 
-<!--
-TODO: Identify the important information, actions, or other outputs produced by
-the software.
-
-Outputs may include:
-* Information displayed to a user
-* Reports
-* Files
-* Database changes
-* Messages sent to another system
-* Actions performed by a device
--->
-
 | Output | Destination | Purpose |
 | --- | --- | --- |
-| `<output>` | `<where it goes>` | `<why it is produced>` |
+| Prompt population and lineage | Local experiment bundle | Explain how strategies changed. |
+| Generated bot samples and provenance | Local experiment bundle | Preserve what was actually evaluated. |
+| Slot-level outcomes and diagnostics | JSON/CSV records | Support correct scoring and investigation. |
+| Baseline, generation, and holdout summaries | Markdown/JSON/CSV reports | Communicate measured findings. |
+| Replay events and guided worksheets | Session material | Provide a usable December fallback. |
 
 ## Major Workflow
 
-<!--
-TODO: Summarize how a typical user, request, transaction, or item of data moves
-through the solution from beginning to end.
+The operator starts with a pilot, chooses limits, and launches a bounded experiment. The software iterates on prompts using optimization matches, then evaluates a frozen selection on a separate holdout schedule. The facilitator can instead import manual observations or review a recorded bundle.
 
-Use a short numbered list or a simple diagram. Focus on the main path rather than
-every possible exception or implementation detail.
-
-If a separate diagram is provided, link to it here.
--->
-
-1. `<Starting event or action>`
-2. `<What happens next>`
-3. `<Important decision or processing step>`
-4. `<Result or completion>`
-
-<!-- Example link when applicable:
-See [23_diagram.drawio](./23_diagram.drawio) for a visual representation of the workflow.
--->
+See the two editable pages in [23_diagram.drawio](./23_diagram.drawio): experiment control flow and system boundaries.
 
 ## Assumptions and Constraints
 
-<!--
-TODO: Identify important assumptions or limitations a reader should understand.
-
-Examples include:
-* Required operating environment
-* Required data or external services
-* Supported users or devices
-* Technology required by the assignment or organization
-* Activities intentionally outside the solution's scope
-
-Include only assumptions and constraints important to understanding the solution.
--->
-
 ### Assumptions
 
-* `<Assumption>`
+Python will coordinate experiments; JavaScript will run the existing game. The first interface is a local command line plus browser game. A dashboard may follow later. Provider/model/budget and trial counts remain configurable and are selected after a small pilot.
 
 ### Constraints
 
-* `<Constraint>`
+Only the strategy prompt evolves. The generation context, game profile, scoring version, and comparison schedule remain fixed within an experiment. Generated code requires a verified isolated execution environment. Real recorded results must be collected during construction; this document package contains no invented tournament evidence.
 
 ## Success Criteria
 
-<!--
-TODO: Explain, in observable terms, what must be true for the solution to be
-considered successful.
-
-Keep these criteria understandable to a nontechnical reader.
-
-More detailed and testable requirements belong in 10_requirements.md when that
-document is used.
--->
-
-* `<The solution successfully ...>`
-* `<The solution correctly ...>`
-* `<The user can ...>`
+- The automated prototype completes a bounded run or clearly explains a recoverable interruption.
+- A reader can recalculate scores from complete exported records and inspect the baseline comparison.
+- The guided session works without participant API keys using manual observations or actual recorded results.
+- The portfolio separates decisions, proposed work, tested behavior, and unresolved limitations.
+- Improvement is measured honestly; a negative or inconclusive finding does not make the engineering project unsuccessful.
 
 ## Related Documents
 
-<!--
-TODO: Link to additional lifecycle documents used by this assignment.
-
-Delete entries that are not used. Add other relevant project documents as needed.
--->
-
-* [Requirements](./10_requirements.md)
-* [Design](./20_design.md)
-* [Architecture](./21_architecture.md)
-* [Diagram](./23_diagram.drawio)
-* [Pseudocode](./26_pseudocode.txt)
-* [Program Design Language](./29_pdl.md)
-* [Construction](./30_construction.md)
-* [Testing](./40_testing.md)
+- [Requirements](./10_requirements.md)
+- [Design](./20_design.md)
+- [Architecture](./21_architecture.md)
+- [Diagram](./23_diagram.drawio)
+- [Pseudocode](./26_pseudocode.txt)
+- [Program Design Language](./29_pdl.md)
+- [Construction](./30_construction.md)
+- [Testing](./40_testing.md)
 
 ## References
 
-<!--
-TODO: List sources used to understand the problem domain or develop this overview,
-if required by the assignment.
-
-Use the citation style required by the course. Delete this section if references
-are not required.
--->
+- [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
+- [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
+- [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
+- [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
 
 <!--
-title: "{{IT-140}} {{Task Code}} | {{Task Title}}"
-description: "A concise, nontechnical overview of the software problem, proposed solution, users, inputs, processing, outputs, workflow, constraints, and success criteria."
+title: "Slither Sam Prompt Evolver | Software Solution Overview"
+description: "Initial project baseline for software solution overview."
 document_type: "Software Solution Overview"
 owner: "GC-STEM, Computer Science"
-scope: "CS000.{{TaskCode}}"
-version: "<0.0.0>"
-updated: "<YYYY-MM-DDTHH:MM:SS±HH:MM>"
+scope: "slither-sam-prompt-evolver"
+version: "0.1.0"
+updated: "2026-10-07T16:12:51-04:00"
 toc: true
-tags: ["overview", "software-development", "software-engineering"]
+tags: ["overview", "software-development", "portfolio"]
 -->
-
-<!-- To see this file in a clean, formatted view, select ▼ in the upper-right corner of the editor pane, then select "Markdown Preview". -->
-
-<!-- TODO: Before submitting, replace all placeholders, resolve all TODO prompts, and delete sections that the assignment explicitly identifies as not applicable. -->
