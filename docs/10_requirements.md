@@ -197,7 +197,6 @@ Configured provider HTTPS requests occur in the trusted coordinator. Any local v
 
 * **NFR-007:** The pilot shall reproduce a local smoke run on the reference Ubuntu environment and document Windows/macOS results as tested or unverified. Evidence: `TC-029`.
 
-
 ### Scalability
 
 Initial execution is sequential and bounded. Distributed processing and concurrent live requests are deferred. Scale values are experiment configuration, not promised capacity.
