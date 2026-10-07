@@ -5,19 +5,19 @@
 <!-- omit from toc -->
 ## Table of Contents
 
-- [Purpose and Scope](#purpose-and-scope)
-- [Product Context](#product-context)
-- [Functional Requirements](#functional-requirements)
-- [Data Requirements](#data-requirements)
-- [External Interface Requirements](#external-interface-requirements)
-- [Nonfunctional Requirements](#nonfunctional-requirements)
-- [Technology and Implementation Constraints](#technology-and-implementation-constraints)
-- [Legal, Regulatory, Policy, and Ethical Constraints](#legal-regulatory-policy-and-ethical-constraints)
-- [Acceptance Criteria](#acceptance-criteria)
-- [Requirements Traceability](#requirements-traceability)
-- [Requirement Priorities and Release Allocation](#requirement-priorities-and-release-allocation)
-- [Risks, Conflicts, and Open Issues](#risks-conflicts-and-open-issues)
-- [References](#references)
+* [Purpose and Scope](#purpose-and-scope)
+* [Product Context](#product-context)
+* [Functional Requirements](#functional-requirements)
+* [Data Requirements](#data-requirements)
+* [External Interface Requirements](#external-interface-requirements)
+* [Nonfunctional Requirements](#nonfunctional-requirements)
+* [Technology and Implementation Constraints](#technology-and-implementation-constraints)
+* [Legal, Regulatory, Policy, and Ethical Constraints](#legal-regulatory-policy-and-ethical-constraints)
+* [Acceptance Criteria](#acceptance-criteria)
+* [Requirements Traceability](#requirements-traceability)
+* [Requirement Priorities and Release Allocation](#requirement-priorities-and-release-allocation)
+* [Risks, Conflicts, and Open Issues](#risks-conflicts-and-open-issues)
+* [References](#references)
 
 ## Purpose and Scope
 
@@ -111,10 +111,10 @@ Model training, GAN training, direct source-code evolution, arbitrary generated-
 
 ### Use Cases or User Stories
 
-- **UC-01 — Pilot:** An operator validates a small configuration, reviews workload/cost bounds, and collects enough evidence to choose provider/model/run settings (FR-001, FR-002, FR-018).
-- **UC-02 — Evolve:** An operator completes an optimization run and freezes a selected prompt for holdout comparison (FR-003–FR-014, FR-017, FR-019–FR-022).
-- **UC-03 — Guide/replay:** A facilitator imports manual records or displays an existing bundle without provider access (FR-015–FR-016).
-- **UC-04 — Resume:** An interrupted experiment resumes only compatible completed work, retaining ambiguous request costs (FR-012, FR-014, FR-018–FR-019).
+* **UC-01 — Pilot:** An operator validates a small configuration, reviews workload/cost bounds, and collects enough evidence to choose provider/model/run settings (FR-001, FR-002, FR-018).
+* **UC-02 — Evolve:** An operator completes an optimization run and freezes a selected prompt for holdout comparison (FR-003–FR-014, FR-017, FR-019–FR-022).
+* **UC-03 — Guide/replay:** A facilitator imports manual records or displays an existing bundle without provider access (FR-015–FR-016).
+* **UC-04 — Resume:** An interrupted experiment resumes only compatible completed work, retaining ambiguous request costs (FR-012, FR-014, FR-018–FR-019).
 
 ## Data Requirements
 
@@ -168,34 +168,34 @@ Configured provider HTTPS requests occur in the trusted coordinator. Any local v
 
 ### Performance and Efficiency
 
-- **NFR-001:** No paid request may start without a finite request cap and a conservative cost reservation that fits the remaining spending cap. Evidence: `TC-023`.
-- **NFR-009:** The runner shall enforce configured source-size, message-size, per-decision time, per-match frame, memory, and run-time limits. Evidence: `TC-031`.
+* **NFR-001:** No paid request may start without a finite request cap and a conservative cost reservation that fits the remaining spending cap. Evidence: `TC-023`.
+* **NFR-009:** The runner shall enforce configured source-size, message-size, per-decision time, per-match frame, memory, and run-time limits. Evidence: `TC-031`.
 
 ### Reliability, Availability, and Recoverability
 
-- **NFR-002:** After forced interruption, every completed evaluation shall be recovered once, with no duplicate terminal records or automatic reissue of ambiguous paid requests. Evidence: `TC-024`.
-- **NFR-008:** Rerunning a saved bot on an identical supported runner profile and seed shall reproduce the recorded direction trace and terminal result. Evidence: `TC-030`.
+* **NFR-002:** After forced interruption, every completed evaluation shall be recovered once, with no duplicate terminal records or automatic reissue of ambiguous paid requests. Evidence: `TC-024`.
+* **NFR-008:** Rerunning a saved bot on an identical supported runner profile and seed shall reproduce the recorded direction trace and terminal result. Evidence: `TC-030`.
 
 ### Security
 
-- **NFR-003:** Generated-code execution shall have no access to provider credentials, host files, or network services, and shall be terminable within the configured deadline. Evidence: `TC-025`.
+* **NFR-003:** Generated-code execution shall have no access to provider credentials, host files, or network services, and shall be terminable within the configured deadline. Evidence: `TC-025`.
 
 ### Privacy
 
-- **NFR-004:** Result bundles shall contain no credentials or participant personal data; export validation shall reject known secret markers. Evidence: `TC-026`.
+* **NFR-004:** Result bundles shall contain no credentials or participant personal data; export validation shall reject known secret markers. Evidence: `TC-026`.
 
 ### Usability and Accessibility
 
-- **NFR-005:** Every command shall provide help and actionable errors; reports shall remain readable with keyboard access and without color, diagrams, or animation. Evidence: `TC-027`.
+* **NFR-005:** Every command shall provide help and actionable errors; reports shall remain readable with keyboard access and without color, diagrams, or animation. Evidence: `TC-027`.
 
 ### Maintainability and Supportability
 
-- **NFR-006:** Scoring, configuration, evolution, storage, and provider contracts shall be testable without live APIs or generated-code execution. Evidence: `TC-028`.
-- **NFR-010:** Every reported fitness value shall be recalculable from an exported configuration and complete slot-level evidence. Evidence: `TC-032`.
+* **NFR-006:** Scoring, configuration, evolution, storage, and provider contracts shall be testable without live APIs or generated-code execution. Evidence: `TC-028`.
+* **NFR-010:** Every reported fitness value shall be recalculable from an exported configuration and complete slot-level evidence. Evidence: `TC-032`.
 
 ### Portability, Compatibility, and Interoperability
 
-- **NFR-007:** The pilot shall reproduce a local smoke run on the reference Ubuntu environment and document Windows/macOS results as tested or unverified. Evidence: `TC-029`.
+* **NFR-007:** The pilot shall reproduce a local smoke run on the reference Ubuntu environment and document Windows/macOS results as tested or unverified. Evidence: `TC-029`.
 
 
 ### Scalability
@@ -212,12 +212,12 @@ The inspected root LICENSE contains the Microsoft MIT notice. Preserve applicabl
 
 ## Acceptance Criteria
 
-- **AC-01:** Automated path completes a small configured run with full schedule evidence, correct fitness, lineage, and a compatible restart demonstration.
-- **AC-02:** Pilot establishes game-profile parity and execution isolation before generated bots run in live experiments.
-- **AC-03:** Guided/manual import and replay work without credentials, provider requests, or stored-bot execution during replay.
-- **AC-04:** Baseline and frozen selected prompt receive equal fresh holdout evaluation; conclusions reflect actual evidence, including no improvement.
-- **AC-05:** All Must requirements and associated tests pass for the declared release environment; blocked/unexecuted tests remain explicitly recorded.
-- **AC-06:** Publishable evidence contains attribution, source/configuration provenance, and no credentials or participant data.
+* **AC-01:** Automated path completes a small configured run with full schedule evidence, correct fitness, lineage, and a compatible restart demonstration.
+* **AC-02:** Pilot establishes game-profile parity and execution isolation before generated bots run in live experiments.
+* **AC-03:** Guided/manual import and replay work without credentials, provider requests, or stored-bot execution during replay.
+* **AC-04:** Baseline and frozen selected prompt receive equal fresh holdout evaluation; conclusions reflect actual evidence, including no improvement.
+* **AC-05:** All Must requirements and associated tests pass for the declared release environment; blocked/unexecuted tests remain explicitly recorded.
+* **AC-06:** Publishable evidence contains attribution, source/configuration provenance, and no credentials or participant data.
 
 ## Requirements Traceability
 
@@ -274,10 +274,10 @@ All listed requirements are Must for the combined initial prototype/session incr
 
 ## References
 
-- [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
-- [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
-- [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
-- [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
+* [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
+* [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
+* [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
+* [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
 
 <!--
 title: "Slither Sam Prompt Evolver | Software Requirements Specification"

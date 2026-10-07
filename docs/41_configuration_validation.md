@@ -10,10 +10,10 @@ The implementation is the configuration-validation change containing this report
 
 ## Environment and Procedure
 
-- Ubuntu 24.04.3 LTS, Linux x86_64, Python 3.12.14.
-- Standard-library `unittest`; no third-party test dependencies.
-- Synthetic fixture: `configs/offline.example.json`.
-- Actual Windows and macOS execution: unverified.
+* Ubuntu 24.04.3 LTS, Linux x86_64, Python 3.12.14.
+* Standard-library `unittest`; no third-party test dependencies.
+* Synthetic fixture: `configs/offline.example.json`.
+* Actual Windows and macOS execution: unverified.
 
 From the repository root:
 
@@ -25,16 +25,16 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 
 ## Verified Behavior
 
-- Valid offline configuration loads into an immutable record and round-trips through a detached JSON snapshot.
-- Unknown/missing fields, unsupported versions, invalid count types, and invalid search/scoring settings are rejected.
-- Optimization and holdout seeds are nonempty, unique, bounded and disjoint.
-- Opponent identities and hash formats are checked; deadlines and resource values are validated.
-- Live-readiness checks require provider/model settings and explicit finite spending/request controls.
-- Decimal spending amounts retain precision; per-request bound cannot exceed total spending cap.
-- Nested provider data is immutable; common credential fields are rejected without echoing their values.
-- Validation performs no environment credential lookup or network connection, including the live-readiness check.
-- Strict JSON loading rejects duplicate fields, nonfinite constants, oversized input, excessive setting depth, and malformed/invalidly encoded files.
-- CLI success/error paths return the documented exit statuses.
+* Valid offline configuration loads into an immutable record and round-trips through a detached JSON snapshot.
+* Unknown/missing fields, unsupported versions, invalid count types, and invalid search/scoring settings are rejected.
+* Optimization and holdout seeds are nonempty, unique, bounded and disjoint.
+* Opponent identities and hash formats are checked; deadlines and resource values are validated.
+* Live-readiness checks require provider/model settings and explicit finite spending/request controls.
+* Decimal spending amounts retain precision; per-request bound cannot exceed total spending cap.
+* Nested provider data is immutable; common credential fields are rejected without echoing their values.
+* Validation performs no environment credential lookup or network connection, including the live-readiness check.
+* Strict JSON loading rejects duplicate fields, nonfinite constants, oversized input, excessive setting depth, and malformed/invalidly encoded files.
+* CLI success/error paths return the documented exit statuses.
 
 ## Command Checks
 

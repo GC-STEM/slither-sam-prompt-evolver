@@ -5,22 +5,22 @@
 <!-- omit from toc -->
 ## Table of Contents
 
-- [Purpose and Scope](#purpose-and-scope)
-- [Design Overview](#design-overview)
-- [Component and Module Design](#component-and-module-design)
-- [Data Design](#data-design)
-- [Interface Design](#interface-design)
-- [Control and Behavioral Design](#control-and-behavioral-design)
-- [Error Handling, Fault Tolerance, and Recovery](#error-handling-fault-tolerance-and-recovery)
-- [Security and Privacy Design](#security-and-privacy-design)
-- [Logging, Monitoring, and Diagnostics](#logging-monitoring-and-diagnostics)
-- [Configuration and Environment Design](#configuration-and-environment-design)
-- [Performance and Resource Design](#performance-and-resource-design)
-- [Design Patterns and Reuse](#design-patterns-and-reuse)
-- [Design Decisions and Rationale](#design-decisions-and-rationale)
-- [Design Verification and Traceability](#design-verification-and-traceability)
-- [Open Issues and Deferred Design Work](#open-issues-and-deferred-design-work)
-- [References](#references)
+* [Purpose and Scope](#purpose-and-scope)
+* [Design Overview](#design-overview)
+* [Component and Module Design](#component-and-module-design)
+* [Data Design](#data-design)
+* [Interface Design](#interface-design)
+* [Control and Behavioral Design](#control-and-behavioral-design)
+* [Error Handling, Fault Tolerance, and Recovery](#error-handling-fault-tolerance-and-recovery)
+* [Security and Privacy Design](#security-and-privacy-design)
+* [Logging, Monitoring, and Diagnostics](#logging-monitoring-and-diagnostics)
+* [Configuration and Environment Design](#configuration-and-environment-design)
+* [Performance and Resource Design](#performance-and-resource-design)
+* [Design Patterns and Reuse](#design-patterns-and-reuse)
+* [Design Decisions and Rationale](#design-decisions-and-rationale)
+* [Design Verification and Traceability](#design-verification-and-traceability)
+* [Open Issues and Deferred Design Work](#open-issues-and-deferred-design-work)
+* [References](#references)
 
 ## Purpose and Scope
 
@@ -266,7 +266,6 @@ Manual observation records, guided comparison sheet and recorded outcome/state t
 
 Missing recordings are reported; unsafe markup is escaped; incomparable manual/automated results remain separate.
 
-
 ## Data Design
 
 ### Domain Model
@@ -387,10 +386,10 @@ Pilot chooses exact resource limits, provider/model, budgets, and sample counts.
 
 ## References
 
-- [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
-- [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
-- [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
-- [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
+* [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
+* [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
+* [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
+* [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
 
 <!--
 title: "Slither Sam Prompt Evolver | Software Design Description"
