@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "EditorConfig.EditorConfig",
+    "ms-vscode.powershell",
+    "ms-python.python",
+    "charliermarsh.ruff",
+    "hediet.vscode-drawio",
+    "bierner.github-markdown-preview",
+    "yzane.markdown-pdf",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}
