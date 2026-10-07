@@ -5,7 +5,7 @@
 This project asks: **Can an evolutionary algorithm improve the strategy prompt used to generate a SnakeBot?** It is planned as a supplement to an Hour of AI session in December 2026 and as an independent professional portfolio project.
 
 > [!IMPORTANT]
-> **Current status: requirements and design baseline.** The SDLC files describe planned software. Automated tournaments, live-provider integration, isolation, and recorded-session results still require implementation and verification. No experimental improvement or passing test results are claimed.
+> **Current status: requirements/design baseline plus implemented configuration validation.** The remaining SDLC capabilities describe planned software. Automated tournaments, live-provider integration, isolation, and recorded-session results still require implementation and verification. The configuration increment has verified tests; no experimental improvement or passing system acceptance is claimed.
 
 ## Project Goals
 
@@ -73,9 +73,29 @@ Saved-source replay can be reproducible even when the provider cannot reproduce 
 
 Diagram previews: [experiment flow](./docs/23_diagram_flow.svg) and [system boundaries](./docs/23_diagram_architecture.svg). Text explanations remain available in the overview, architecture, design and pseudocode.
 
+## Configuration Validation
+
+The first construction increment validates experiment settings locally. From the repository root in Bash, using Python 3.12 or later:
+
+```bash
+PYTHONPATH=src python -m slither_evolver validate --config configs/offline.example.json
+```
+
+The supplied configuration uses synthetic opponents, hashes, and limits. It is an offline validation example, not a recommended pilot configuration. Add `--live` to check the fields required for future live requests; the supplied example intentionally fails because provider/budget decisions are still open. Neither check makes model requests, reads credentials, or runs bots.
+
+[Configuration contract and commands](./docs/11_configuration.md) · [Actual validation evidence](./docs/41_configuration_validation.md)
+
+Run the standard-library tests:
+
+```bash
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+
+All 26 configuration tests passed on Ubuntu 24.04.3 with Python 3.12.14. Storage, scoring, tournaments, and other experiment commands remain planned.
+
 ## Getting Started
 
-Start with the original [Slither Slam activity](https://aka.ms/slither-slam), then read the project overview and requirements. Runtime setup and executable commands will be published after implementation and pilot verification. Command names in the design documents are proposed interfaces, not currently verified instructions.
+Start with the original [Slither Slam activity](https://aka.ms/slither-slam), then read the project overview and requirements. The validation command above is implemented. Experiment runtime setup and the other command names in the design documents remain proposed until their implementation and pilot verification.
 
 The December session can use manual observations or genuine recorded results if live automation is unavailable. Those real bundles must be produced and reviewed during construction; synthetic fixtures cannot substitute for claimed experimental findings.
 

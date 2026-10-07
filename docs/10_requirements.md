@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Software Requirements Specification
 
-**Document status:** Initial design baseline, version 0.1.0. Describes planned software; implementation and execution evidence are not claimed.
+**Document status:** Baseline revision 0.1.1. Configuration validation has implementation/test evidence; other planned capabilities remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -54,7 +54,7 @@ The project needs comparable evidence about prompt quality and a dependable lear
 
 ### Product Perspective
 
-New experiment tooling around existing Slither Slam source. The bundled `index.yml` contains game, opponent, helper, system-prompt, and browser resources. Existing Python source and test files are templates, not an implemented optimizer or test suite.
+New experiment tooling around existing Slither Slam source. The bundled `index.yml` contains game, opponent, helper, system-prompt, and browser resources. Configuration validation is now implemented; see [its contract](./11_configuration.md) and [execution evidence](./41_configuration_validation.md). The original placeholder files remain templates, and the optimizer/game pipeline is not yet implemented.
 
 ### Stakeholders and User Classes
 
@@ -285,8 +285,8 @@ description: "Initial project baseline for software requirements specification."
 document_type: "Software Requirements Specification (SRS)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.0"
-updated: "2026-10-07T16:12:51-04:00"
+version: "0.1.1"
+updated: "2026-10-07T19:05:27-04:00"
 toc: true
 tags: ["requirements", "srs", "portfolio"]
 -->

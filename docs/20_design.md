@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Software Design Description
 
-**Document status:** Initial design baseline, version 0.1.0. Describes planned software; implementation and execution evidence are not claimed.
+**Document status:** Baseline revision 0.1.1. Configuration validation has implementation/test evidence; other planned capabilities remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -298,7 +298,7 @@ Operator inputs become normalized configuration and a manifest. Provider respons
 
 ### User Interface Design
 
-Proposed command family: `python -m slither_evolver pilot --config PATH`, `evolve --config PATH`, `guided --input PATH --manifest PATH`, `replay --run PATH`, `report --run PATH`, and `resume --run PATH`. Each supports help. `pilot` plans work offline by default; explicit `--live` permits bounded generation when required settings exist. These commands are targets for implementation.
+Proposed command family: `python -m slither_evolver pilot --config PATH`, `evolve --config PATH`, `guided --input PATH --manifest PATH`, `replay --run PATH`, `report --run PATH`, and `resume --run PATH`. Each supports help. `pilot` plans work offline by default; explicit `--live` permits bounded generation when required settings exist. These experiment commands are targets for implementation. The first implemented command is `python -m slither_evolver validate --config PATH [--live]`; see [the configuration contract](./11_configuration.md). Validation does not start live work.
 
 Exit statuses: 0 completed requested workflow; 2 invalid input; 3 missing dependency/isolation prerequisite; 4 external service/infrastructure failure; 5 bounded or operator stop. Messages identify what was saved and a recovery action. Report replay uses inert content only. Visual match watching is a separate trusted viewer workflow and may run only after execution isolation is verified.
 
@@ -398,8 +398,8 @@ description: "Initial project baseline for software design description."
 document_type: "Software Design Description (SDD)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.0"
-updated: "2026-10-07T16:12:51-04:00"
+version: "0.1.1"
+updated: "2026-10-07T19:05:27-04:00"
 toc: true
 tags: ["design", "sdd", "portfolio"]
 -->

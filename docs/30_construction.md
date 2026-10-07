@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Software Construction Plan
 
-**Document status:** Initial design baseline, version 0.1.0. Describes planned software; implementation and execution evidence are not claimed.
+**Document status:** Baseline revision 0.1.1. Configuration validation has implementation/test evidence; other planned capabilities remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -32,7 +32,7 @@
 
 ### Purpose
 
-Guide incremental implementation, integration, and evidence collection for the independent portfolio project. This is a construction plan, not a claim that an optimizer, runner, or test suite exists.
+Guide incremental implementation, integration, and evidence collection for the independent portfolio project. This is a construction plan. The [configuration validator](./11_configuration.md) and its [test evidence](./41_configuration_validation.md) form the first implemented part of W-02; the optimizer and runner remain planned.
 
 ### Construction Scope
 
@@ -239,8 +239,8 @@ description: "Initial project baseline for software construction plan."
 document_type: "Software Construction Plan (SCP)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.0"
-updated: "2026-10-07T16:12:51-04:00"
+version: "0.1.1"
+updated: "2026-10-07T19:05:27-04:00"
 toc: true
 tags: ["construction", "implementation", "portfolio"]
 -->

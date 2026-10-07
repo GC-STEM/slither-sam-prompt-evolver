@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Software Test Plan
 
-**Document status:** Initial design baseline, version 0.1.0. Describes planned software; implementation and execution evidence are not claimed.
+**Document status:** Baseline revision 0.1.1. Configuration validation has implementation/test evidence; other planned capabilities remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -33,11 +33,11 @@
 
 ### Purpose
 
-Verify requirements and investigate whether the initial prototype/session increment is usable, bounded, and supported by honest evidence. This plan contains procedures; it contains no fabricated executions or passing results.
+Verify requirements and investigate whether the initial prototype/session increment is usable, bounded, and supported by honest evidence. This plan distinguishes planned procedures from configuration-only execution evidence. It does not claim completed system acceptance.
 
 ### System Under Test
 
-The planned local Python coordinator, provider/budget adapters, JavaScript runner, scoring/search, evidence store, guided import and inert replay. The current program and test files are templates.
+The planned local Python coordinator, provider/budget adapters, JavaScript runner, scoring/search, evidence store, guided import and inert replay. The configuration validator and its 26 implementation tests now exist; [execution evidence](./41_configuration_validation.md) records that increment. The original placeholder files remain templates; other components are planned.
 
 ### Test Basis
 
@@ -160,11 +160,11 @@ Select/pin Python and JavaScript test tools during construction. Automate unit/c
 
 ## Test Case and Procedure Design
 
-Common preconditions: implemented component at a recorded commit; compatible fixture schema; offline mode unless the procedure explicitly requires controlled game/live execution. Runner misuse/parity cases require the isolated environment. All cases start **Not run**. Detailed automation can later refine these procedures without changing their IDs or expected behavior.
+Common preconditions: implemented component at a recorded commit; compatible fixture schema; offline mode unless the procedure explicitly requires controlled game/live execution. Runner misuse/parity cases require the isolated environment. TC-001 configuration assertions have executed successfully; its full run-manifest/execution-gating integration remains pending. All other case procedures remain **Not run**. Detailed automation can later refine these procedures without changing their IDs or expected behavior.
 
 | Test ID | Objective / Requirement | Preconditions | Inputs / Steps | Expected Result | Automation |
 | --- | --- | --- | --- | --- | --- |
-| `TC-001` | `FR-001` | Implemented component + versioned fixtures | Unknown key, zero sample count, overlapping seed sets, and missing budget in live configuration. | Reject before network or code execution; valid configuration produces a normalized manifest. | Planned automated; Not run |
+| `TC-001` | `FR-001` | Implemented component + versioned fixtures | Unknown key, zero sample count, overlapping seed sets, and missing budget in live configuration. | Reject before network or code execution; valid configuration produces a normalized manifest. | Validation assertions passed; manifest/gating integration pending; see [evidence](./41_configuration_validation.md) |
 | `TC-002` | `FR-002` | Implemented component + versioned fixtures | Invoke help and each planned command with a small fixture bundle. | Each command performs only its declared workflow; offline modes have no provider calls. | Planned automated; Not run |
 | `TC-003` | `FR-003` | Implemented component + versioned fixtures | Change a strategy prompt, then attempt to change frozen API/model/system context on resume. | Prompt changes are versioned; incompatible resume is rejected and baseline hash is unchanged. | Planned automated; Not run |
 | `TC-004` | `FR-004` | Implemented component + versioned fixtures | Initialize population twice with identical search seed; generate mutation and crossover children. | Population and lineage match; exact duplicates are rejected after bounded retries. | Planned automated; Not run |
@@ -275,7 +275,7 @@ Report planned/executed/passed/failed/blocked/Not run counts, defect severity, s
 
 ## Test Deliverables
 
-This plan, implemented tests/fixtures, environment/version manifest, execution records, defect reports, raw/aggregate result bundle, actual usage/cost records, guided/replay rehearsal evidence, and a test completion report with recommendation and limitations. No passing execution report exists in this document package.
+This plan, implemented tests/fixtures, environment/version manifest, execution records, defect reports, raw/aggregate result bundle, actual usage/cost records, guided/replay rehearsal evidence, and a test completion report with recommendation and limitations. A [passing configuration-only report](./41_configuration_validation.md) exists. No completed system acceptance report is claimed.
 
 ## Test Evidence and Reproducibility
 
@@ -287,7 +287,7 @@ The project owner reviews executed evidence against AC-01–AC-06. Recommend acc
 
 ## Open Issues
 
-Implement tests; select runtime/tool versions and isolation strategy; select pilot settings/caps; confirm session date; obtain real recorded results. Every case remains Not run until executed. The requirement/design baseline can be reviewed now without implying later quality gates have passed.
+Implement tests; select runtime/tool versions and isolation strategy; select pilot settings/caps; confirm session date; obtain real recorded results. Only TC-001 validation assertions have been executed so far; its integration portions and all other cases remain pending/Not run. The requirement/design baseline can be reviewed now without implying later quality gates have passed.
 
 ## References
 
@@ -302,8 +302,8 @@ description: "Initial project baseline for software test plan."
 document_type: "Software Test Plan (STP)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.0"
-updated: "2026-10-07T16:12:51-04:00"
+version: "0.1.1"
+updated: "2026-10-07T19:05:27-04:00"
 toc: true
 tags: ["testing", "stp", "portfolio"]
 -->
