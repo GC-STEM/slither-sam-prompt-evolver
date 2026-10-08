@@ -1,6 +1,6 @@
 # Experiment Configuration | Implemented Contract
 
-This first construction increment implements `FR-001` configuration validation. It includes an immutable `RunConfig`, strict UTF-8 JSON loading, a synthetic offline example, and a validation command. Local storage is now implemented separately in [its contract](./12_local_storage.md). Generation, tournament execution, scoring, and reports remain planned.
+This first construction increment implements `FR-001` configuration validation. It includes an immutable `RunConfig`, strict UTF-8 JSON loading, a synthetic offline example, and a validation command. Local storage is now implemented separately in [its contract](./12_local_storage.md). Offline scoring is implemented in [its contract](./13_offline_scoring.md). Generation, tournament execution, and the report workflow remain planned.
 
 ## Run the Validator
 
@@ -35,7 +35,7 @@ All fields shown in [offline.example.json](../configs/offline.example.json) are 
 | --- | --- |
 | `schema_version` | Integer `1`. Boolean values are not integers in this contract. |
 | `run_id` | 1–64 ASCII letters/digits/underscores/hyphens; starts with a letter or digit; cannot be a path. |
-| `mode` | `pilot` or `evolve`. These describe future experiment workflows; the current offline interface implements `validate`, `init`, and `inspect`. Guided/replay imports will have separate input contracts. |
+| `mode` | `pilot` or `evolve`. These describe future experiment workflows; the current offline interface implements `validate`, `init`, `inspect`, and `score`. Guided/replay imports will have separate input contracts. |
 | `population_size` | Integer at least 2. |
 | `generation_count`, `samples_per_prompt` | Positive integers; generation count includes generation zero. |
 | `search.elite_count` | Integer from 1 through population size minus 1. |

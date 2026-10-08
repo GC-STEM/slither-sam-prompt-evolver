@@ -1,10 +1,12 @@
-"""Validate configuration and initialize/inspect offline evidence stores."""
+"""Validate settings, preserve local evidence, and score offline results."""
 
 import argparse
+import json
 import sys
 
 from slither_evolver.config import ConfigError, load_config
 from slither_evolver.storage import RunStore, StorageError
+from slither_evolver.scoring import IncompleteEvidence, ScoringError, load_results, score_results
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -25,6 +27,9 @@ def main(argv: list[str] | None = None) -> int:
     initialize.add_argument("--description", required=True, help="Short provenance note; never include secrets.")
     inspect = commands.add_parser("inspect", help="Verify stored hashes/relationships without running bots.")
     inspect.add_argument("--run", required=True, help="Path to an existing run directory.")
+    score = commands.add_parser("score", help="Score a complete declared result schedule; no bot execution.")
+    score.add_argument("--config", required=True, help="Path to the frozen experiment configuration.")
+    score.add_argument("--results", required=True, help="Path to a schema-version-1 results bundle.")
     args = parser.parse_args(argv)
     try:
         if args.command == "inspect":
@@ -33,7 +38,11 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Records: {summary['prompts']} prompts, {summary['samples']} samples, {summary['artifacts']} artifacts.")
         else:
             config = load_config(args.config, live=args.command == "validate" and args.live)
-            if args.command == "init":
+            if args.command == "score":
+                result = score_results(config, load_results(args.results))
+                print(json.dumps(result.to_dict(), indent=2, ensure_ascii=False, allow_nan=False))
+                return 0
+            elif args.command == "init":
                 store = RunStore.create(args.runs_dir, config, provenance=args.provenance,
                                         description=args.description)
                 print(f"Created local run: {store.path}")
@@ -42,6 +51,12 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"Valid {check}: {config.run_id} (schema {config.schema_version}).")
     except ConfigError as error:
         print(f"Configuration error: {error}", file=sys.stderr)
+        return 2
+    except IncompleteEvidence as error:
+        print(f"Scoring blocked: {error}", file=sys.stderr)
+        return 5
+    except ScoringError as error:
+        print(f"Scoring error: {error}", file=sys.stderr)
         return 2
     except StorageError as error:
         print(f"Storage error: {error}", file=sys.stderr)

@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Program Design Language
 
-**Document status:** Baseline revision 0.1.2. Configuration validation and local run storage have implementation/test evidence; other capabilities and full system acceptance remain unverified.
+**Document status:** Baseline revision 0.1.3. Configuration validation, local run storage, and offline scoring have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -19,13 +19,13 @@
 
 ## Purpose and Scope
 
-The source `29_pdl.md` was empty. This project-specific PDL refines the language-independent pseudocode into implementation-oriented responsibilities without supplying executable source. The proposed construction organization uses Python for control and JavaScript for game decisions; functions below are planned interfaces except the configuration and local storage operations identified here.
+The source `29_pdl.md` was empty. This project-specific PDL refines the language-independent pseudocode into implementation-oriented responsibilities without supplying executable source. The proposed construction organization uses Python for control and JavaScript for game decisions; functions below are planned interfaces except the configuration, local storage, and offline scoring operations identified here.
 
 PDL uses indentation, named records, IF/ELSE, FOR/WHILE, REQUIRE, RETURN and LET. It describes intent and invariants rather than a specific language's syntax. The high-level algorithm remains in [26_pseudocode.txt](./26_pseudocode.txt).
 
 ## Entry Points and Dispatch
 
-Implemented dispatch handles `validate`, `init`, and `inspect`. Initialization revalidates configuration, requires a provenance label, and publishes a local manifest. Inspection verifies existing evidence without loading a provider or executing source. The following dispatcher describes the future experiment coordinator.
+Implemented dispatch handles `validate`, `init`, `inspect`, and `score`. Initialization revalidates configuration, requires a provenance label, and publishes a local manifest. Inspection verifies existing evidence without loading a provider or executing source. Scoring validates declared JSON samples/results and requires complete scoreable schedules; it emits no final fitness for missing/blocked evidence. The following dispatcher describes the future experiment coordinator.
 
 ```text
 PROCEDURE main(arguments)
@@ -58,7 +58,7 @@ Offline modes must not construct a live provider or execute stored bot source. E
 | validation.extract | Raw response → Sample | Original retained; frozen API and source limits | invalid_bot; no silent repair |
 | evaluation.schedule | Samples + profiles + seeds → Slots | Same K and profile/seed sets for comparisons | InvalidSchedule |
 | runner.evaluate | MatchRequest → MatchResult | Verified isolation/profile; action-only worker messages | bot_fault versus engine/isolation_fault |
-| scoring.score | Complete scoreable slots → FitnessResult | Every scheduled denominator represented | IncompleteEvidence; no final score |
+| score_results | Validated config + versioned declared results → immutable FitnessResult | Every scheduled denominator represented; exact configured weights; played/synthetic counts separate | ScoringError or IncompleteEvidence; no final score on incomplete/blocked evidence |
 | evolution.next | Ranked prompts + RNG/config → Population | Strategy-only changes; bounded search; E < P | PopulationError with operation evidence |
 | RunStore.create/open/add/get/verify | Valid config or supplied text → frozen local evidence | Existing IDs immutable; content/metadata hashes checked; incomplete catalog blocked | StorageError; no external execution |
 | storage.checkpoint | Valid state → durable snapshot | Single writer; atomic replacement | StorageFault; scheduling suspends |
@@ -137,6 +137,8 @@ PROCEDURE calculate_fitness(slots)
 END PROCEDURE
 ```
 
+Implemented result validation binds slot IDs to configuration/prompt/sample/opponent/seed coordinates, rejects duplicates and contradictory statuses, and checks the exact Cartesian schedule count. Exact rational calculation follows this refinement; generation acceptance and actual match outcomes remain caller declarations pending trusted pipeline integration.
+
 Synthetic invalid-generation exposures preserve K × seed-count denominators but are reported separately from played games. Draws score zero under version 1. Holdout is a reporting phase only. A report includes sample count, validity, played outcomes, scheduled outcomes, costs, limitations, and whether the comparison completed.
 
 ## Search Refinement
@@ -181,8 +183,8 @@ description: "Initial project baseline for program design language."
 document_type: "Program Design Language (PDL)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.2"
-updated: "2026-10-07T19:39:33-04:00"
+version: "0.1.3"
+updated: "2026-10-07T21:07:12-04:00"
 toc: true
 tags: ["pdl", "algorithms", "portfolio"]
 -->

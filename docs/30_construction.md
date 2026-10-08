@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Software Construction Plan
 
-**Document status:** Baseline revision 0.1.2. Configuration validation and local run storage have implementation/test evidence; other capabilities and full system acceptance remain unverified.
+**Document status:** Baseline revision 0.1.3. Configuration validation, local run storage, and offline scoring have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -32,7 +32,7 @@
 
 ### Purpose
 
-Guide incremental implementation, integration, and evidence collection for the independent portfolio project. This is a construction plan. The [configuration validator](./11_configuration.md) and [local evidence store](./12_local_storage.md) are implemented parts of W-02; [61 passing tests](./42_storage_validation.md) cover their offline contracts. Scoring/reporting and full recovery remain pending, so W-02 is not complete. The optimizer and runner remain planned.
+Guide incremental implementation, integration, and evidence collection for the independent portfolio project. This is a construction plan. The [configuration validator](./11_configuration.md) and [local evidence store](./12_local_storage.md) are implemented parts of W-02; [87 passing tests](./43_scoring_validation.md) cover configuration, storage, and the newly implemented [offline scorer](./13_offline_scoring.md). The fixture report workflow and full recovery remain pending, so W-02 is not complete. The optimizer and runner remain planned.
 
 ### Construction Scope
 
@@ -91,14 +91,14 @@ Use descriptive snake_case Python names, consistent JavaScript names, small sing
 | `runs/` | Local generated artifacts and credentials-free evidence; raw runs excluded from ordinary commits. |
 | `docs/` | SDLC baseline, decisions, setup and final evidence summary. |
 
-Configuration, storage, and offline command dispatch now exist with component tests. Other paths are targets. The unused program/test templates have been removed.
+Configuration, storage, scoring, and offline command dispatch now exist with component tests. Other paths are targets. The unused program/test templates have been removed.
 
 ## Work Breakdown and Construction Order
 
 | Work Item | Increment / Prerequisites | Deliverable / Gate |
 | --- | --- | --- |
 | W-01 | Baseline review | Requirements/design decisions and unresolved pilot settings recorded. |
-| W-02 | Domain schemas, config, store, scorer | Partial: configuration and local prompt/sample storage verified; scorer, fixture report and full recovery pending. |
+| W-02 | Domain schemas, config, store, scorer | Partial: configuration, local prompt/sample storage, and offline scorer verified; full fixture report workflow and recovery pending. |
 | W-03 | Guided import and inert replay after W-02 | No-credentials demonstration with labeled fixtures; real data still pending. |
 | W-04 | Early game/API/clock/randomness spike | Original/adapted parity findings, profile version and known rule quirks. |
 | W-05 | Isolation and limits after W-04 | Capability/deadline tests pass before accepting generated source. |
@@ -239,8 +239,8 @@ description: "Initial project baseline for software construction plan."
 document_type: "Software Construction Plan (SCP)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.2"
-updated: "2026-10-07T19:39:33-04:00"
+version: "0.1.3"
+updated: "2026-10-07T21:07:12-04:00"
 toc: true
 tags: ["construction", "implementation", "portfolio"]
 -->

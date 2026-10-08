@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Software Design Description
 
-**Document status:** Baseline revision 0.1.2. Configuration validation and local run storage have implementation/test evidence; other capabilities and full system acceptance remain unverified.
+**Document status:** Baseline revision 0.1.3. Configuration validation, local run storage, and offline scoring have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -184,11 +184,11 @@ Calculate prompt fitness and create strategy-only descendants. Traces: FR-003–
 
 #### Public Interface
 
-score(complete_slots, schedule) → FitnessResult; evolve(ranked_prompts, search_state, config) → Population.
+Implemented `score_results(config, bundle) → FitnessResult`: the versioned bundle declares samples and slot results, and a complete compatible scoreable schedule is required. See [the scoring contract](./13_offline_scoring.md). Planned `evolve(ranked_prompts, search_state, config) → Population`.
 
 #### Internal Structure
 
-Pure scorer, seeded parent selection, fragment operations, immutable prompt context.
+Implemented pure scorer with frozen result dataclasses, exact rational calculation, closed result schema, and separate played/synthetic counts. Seeded parent selection and fragment operations remain planned.
 
 #### Dependencies
 
@@ -297,7 +297,7 @@ Operator inputs become normalized configuration and a manifest. Provider respons
 
 ### User Interface Design
 
-Proposed command family: `python -m slither_evolver pilot --config PATH`, `evolve --config PATH`, `guided --input PATH --manifest PATH`, `replay --run PATH`, `report --run PATH`, and `resume --run PATH`. Each supports help. `pilot` plans work offline by default; explicit `--live` permits bounded generation when required settings exist. These experiment commands are targets for implementation. The first implemented command is `python -m slither_evolver validate --config PATH [--live]`; see [the configuration contract](./11_configuration.md). Implemented `init --config PATH --provenance KIND --description TEXT [--runs-dir PATH]` creates local evidence and `inspect --run PATH` verifies it. Neither command starts live work. All three offline commands are covered by tests; storage faults return exit 4.
+Proposed command family: `python -m slither_evolver pilot --config PATH`, `evolve --config PATH`, `guided --input PATH --manifest PATH`, `replay --run PATH`, `report --run PATH`, and `resume --run PATH`. Each supports help. `pilot` plans work offline by default; explicit `--live` permits bounded generation when required settings exist. These experiment commands are targets for implementation. The first implemented command is `python -m slither_evolver validate --config PATH [--live]`; see [the configuration contract](./11_configuration.md). Implemented `init --config PATH --provenance KIND --description TEXT [--runs-dir PATH]` creates local evidence and `inspect --run PATH` verifies it. Neither command starts live work. Implemented `score --config PATH --results PATH` emits JSON for complete scoreable evidence and exit 5 without final fitness for valid incomplete/blocked evidence; malformed scoring input returns 2. All four offline commands are covered by tests; storage faults return exit 4.
 
 Exit statuses: 0 completed requested workflow; 2 invalid input; 3 missing dependency/isolation prerequisite; 4 external service/infrastructure failure; 5 bounded or operator stop. Messages identify what was saved and a recovery action. Report replay uses inert content only. Visual match watching is a separate trusted viewer workflow and may run only after execution isolation is verified.
 
@@ -321,9 +321,9 @@ No device-specific interfaces are required.
 
 Validate → manifest → baseline/population → generation samples → interface validation → fixed match schedule → complete fitness → selection/evolution → stop/freeze → fresh holdout samples for baseline and selection → report. Inspect [26_pseudocode.txt](./26_pseudocode.txt) for branches and bounded loops.
 
-**Scoring version 1:** For each opponent/configuration profile o, let N_o = K × S scheduled slots and W_o be wins. Invalid generated samples contribute synthetic zero-credit slots. Played draws and bot-caused losses contribute zero wins. Define R_o = W_o / N_o; overall R = sum(W_o) / sum(N_o); worst R_min = min(R_o). Fitness F = 0.70R + 0.30R_min. An infrastructure-blocked or missing slot prevents final scoring. Reports call these **effective scheduled-trial win rates** and separately report ordinary played-match wins/losses/draws and generation validity, so synthetic failures are never described as played matches.
+**Implemented offline scoring version 1:** For each opponent/configuration profile o, let N_o = K × S scheduled slots and W_o be wins. Invalid generated samples contribute synthetic zero-credit slots. Played draws and bot-caused losses contribute zero wins. Define R_o = W_o / N_o; overall R = sum(W_o) / sum(N_o); worst R_min = min(R_o). Fitness F = 0.70R + 0.30R_min. An infrastructure-blocked or missing slot prevents final scoring. Reports call these **effective scheduled-trial win rates** and separately report ordinary played-match wins/losses/draws and generation validity, so synthetic failures are never described as played matches.
 
-With equal opponent schedules, rates 0.92, 0.88, 0.90, and 0.20 yield R = 0.725 and F = 0.5675. All valid wins score 1; all draws or invalid samples score 0. Weights are configurable but frozen in the scoring-version manifest before comparison.
+With equal opponent schedules, rates 0.92, 0.88, 0.90, and 0.20 yield R = 0.725 and F = 0.5675. All valid wins score 1; all draws or invalid samples score 0. Weights are configurable but frozen in the scoring-version manifest before comparison. The implemented scorer retains supplied weights without renormalization, calculates with exact rational values, and exports both float values and reduced fractions. Its sample acceptance/provenance labels are declarations; it does not certify provider/runner output. Slot persistence and trusted outcome production remain future integrations.
 
 **Search version 1:** Rank by fitness descending, then valid-generation fraction descending, strategy character count ascending, and prompt hash ascending. Retain a configured elite count E where 1 <= E < P. Choose parents using seeded tournament selection (configured tournament size). For remaining slots choose mutation or crossover with configured probabilities summing to 1. Represent strategy text as ordered instruction fragments; mutation adds/removes/rewrites/reorders one allowed fragment using a versioned proposal bank, and crossover combines parent fragments then resolves exact duplicates. Do not mutate fixed API/system instructions. Reject empty, oversized, unchanged, or duplicate candidates. After bounded attempts, use distinct configured seed variants; if still insufficient, stop with a clear population-construction error. This first search design uses no extra LLM calls for mutations.
 
@@ -378,7 +378,7 @@ Ports/adapters for provider and runner; immutable value records for manifests; s
 
 ## Design Verification and Traceability
 
-The requirement-to-module/test mapping in [Requirements](./10_requirements.md#requirements-traceability) is authoritative. Component sections above identify requirement groups. Scorer/search tests cover normal, boundary and failure cases; runner tests cover helper/rule parity and isolation; local storage tests cover injected publication/flush failures and incompatible context; paid-request ambiguity and full interruption/recovery tests remain planned. All planned tests are specified in [Testing](./40_testing.md).
+The requirement-to-module/test mapping in [Requirements](./10_requirements.md#requirements-traceability) is authoritative. Component sections above identify requirement groups. Scorer component tests now cover independent arithmetic, normal/boundary outcomes, malformed evidence, and incomplete/infrastructure-blocked schedules. Search tests remain planned; runner tests cover helper/rule parity and isolation; local storage tests cover injected publication/flush failures and incompatible context; paid-request ambiguity and full interruption/recovery tests remain planned. All planned tests are specified in [Testing](./40_testing.md).
 
 ## Open Issues and Deferred Design Work
 
@@ -397,8 +397,8 @@ description: "Initial project baseline for software design description."
 document_type: "Software Design Description (SDD)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.2"
-updated: "2026-10-07T19:39:33-04:00"
+version: "0.1.3"
+updated: "2026-10-07T21:07:12-04:00"
 toc: true
 tags: ["design", "sdd", "portfolio"]
 -->

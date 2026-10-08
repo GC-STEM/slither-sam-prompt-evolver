@@ -5,7 +5,7 @@
 This project asks: **Can an evolutionary algorithm improve the strategy prompt used to generate a SnakeBot?** It is planned as a supplement to an Hour of AI session in December 2026 and as an independent professional portfolio project.
 
 > [!IMPORTANT]
-> **Current status: requirements/design baseline plus implemented configuration validation and local run storage.** The remaining SDLC capabilities describe planned software. Automated tournaments, live-provider integration, isolation, and recorded-session results still require implementation and verification. The offline increments have verified tests; no experimental improvement or passing system acceptance is claimed.
+> **Current status: requirements/design baseline plus implemented configuration validation, local run storage, and offline scoring.** The remaining SDLC capabilities describe planned software. Automated tournaments, live-provider integration, isolation, and recorded-session results still require implementation and verification. The offline increments have verified tests; no experimental improvement or passing system acceptance is claimed.
 
 ## Project Goals
 
@@ -40,7 +40,7 @@ The **strategy prompt** evolves. Generated bot source is evaluated and preserved
 
 ## Fitness Function
 
-The proposed starting formula is:
+The implemented scoring-version-1 starting formula is:
 
 ```text
 fitness = 0.70 × overall_effective_win_rate
@@ -91,7 +91,7 @@ Run the standard-library tests:
 PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
-All 61 tests (26 configuration and 35 storage) passed on Ubuntu 24.04.3 with Python 3.12.14. Scoring, tournaments, and the experiment coordinator remain planned. Full scheduler recovery is not implemented.
+All 87 tests (26 configuration, 35 storage, and 26 scoring) passed on Ubuntu 24.04.3 with Python 3.12.14. Tournaments, the report workflow, and the experiment coordinator remain planned. Full scheduler recovery is not implemented.
 
 ## Local Run Storage
 
@@ -110,9 +110,49 @@ For a save/reload demonstration with handwritten prompts and source text, run `P
 
 [Storage contract and recovery limits](./docs/12_local_storage.md) · [Actual storage evidence](./docs/42_storage_validation.md)
 
+## Offline Scoring
+
+Run the independently checked arithmetic example:
+
+```bash
+PYTHONPATH=src python examples/scoring_demo.py
+```
+
+Expected synthetic fitness: **0.5675**, exactly **227/400**. No actual games or provider requests occur. For the complete JSON summary:
+
+```bash
+PYTHONPATH=src python -m slither_evolver score \
+  --config fixtures/scoring/design_example.config.json \
+  --results fixtures/scoring/design_example.results.json
+```
+
+Scoring requires every configured sample/opponent/seed slot exactly once. Invalid-generation exposures count as synthetic zero-credit slots; missing results, infrastructure faults, and interruptions block final fitness. Provenance labels stay in the summary.
+
+[Scoring/result contract](./docs/13_offline_scoring.md) · [Actual scoring evidence](./docs/43_scoring_validation.md)
+
+## Offline Scoring
+
+Run the independently checked arithmetic example:
+
+```bash
+PYTHONPATH=src python examples/scoring_demo.py
+```
+
+Expected synthetic fitness: **0.5675**, exactly **227/400**. No actual games or provider requests occur. For the complete JSON summary:
+
+```bash
+PYTHONPATH=src python -m slither_evolver score \
+  --config fixtures/scoring/design_example.config.json \
+  --results fixtures/scoring/design_example.results.json
+```
+
+Scoring requires every configured sample/opponent/seed slot exactly once. Invalid-generation exposures count as synthetic zero-credit slots; missing results, infrastructure faults, and interruptions block final fitness. Provenance labels stay in the summary.
+
+[Scoring/result contract](./docs/13_offline_scoring.md) · [Actual scoring evidence](./docs/43_scoring_validation.md)
+
 ## Getting Started
 
-Start with the original [Slither Slam activity](https://aka.ms/slither-slam), then read the project overview and requirements. The validation, initialization, and inspection commands above are implemented. Experiment runtime setup and the other command names in the design documents remain proposed until their implementation and pilot verification.
+Start with the original [Slither Slam activity](https://aka.ms/slither-slam), then read the project overview and requirements. The validation, initialization, inspection, and scoring commands above are implemented. Experiment runtime setup and the other command names in the design documents remain proposed until their implementation and pilot verification.
 
 The December session can use manual observations or genuine recorded results if live automation is unavailable. Those real bundles must be produced and reviewed during construction; synthetic fixtures cannot substitute for claimed experimental findings.
 

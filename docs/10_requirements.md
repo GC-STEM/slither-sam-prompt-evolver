@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Software Requirements Specification
 
-**Document status:** Baseline revision 0.1.2. Configuration validation and local run storage have implementation/test evidence; other capabilities and full system acceptance remain unverified.
+**Document status:** Baseline revision 0.1.3. Configuration validation, local run storage, and offline scoring have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -54,7 +54,7 @@ The project needs comparable evidence about prompt quality and a dependable lear
 
 ### Product Perspective
 
-New experiment tooling around existing Slither Slam source. The bundled `index.yml` contains game, opponent, helper, system-prompt, and browser resources. Configuration validation and local run storage are implemented; see [configuration](./11_configuration.md), [storage](./12_local_storage.md), and [storage evidence](./42_storage_validation.md). The unused program/test templates have been removed; the optimizer/game pipeline is not yet implemented.
+New experiment tooling around existing Slither Slam source. The bundled `index.yml` contains game, opponent, helper, system-prompt, and browser resources. Configuration validation, local run storage, and offline scoring are implemented; see [configuration](./11_configuration.md), [storage](./12_local_storage.md), [scoring](./13_offline_scoring.md), and [scoring evidence](./43_scoring_validation.md). The unused program/test templates have been removed; the optimizer/game pipeline is not yet implemented.
 
 ### Stakeholders and User Classes
 
@@ -150,7 +150,7 @@ Credentials are transient operator secrets, read only by the trusted provider ad
 
 ### User Interfaces
 
-Terminal commands with explicit offline/live modes, help, progress, and error recovery. Browser visualization is supplemental; readable reports explain all outcomes. Validation, run initialization, and integrity inspection are runnable; the experiment workflow commands remain planned. Implemented commands and exit statuses are specified in the configuration/storage contracts.
+Terminal commands with explicit offline/live modes, help, progress, and error recovery. Browser visualization is supplemental; readable reports explain all outcomes. Validation, run initialization, integrity inspection, and offline scoring are runnable; the experiment workflow commands remain planned. Implemented commands and exit statuses are specified in the configuration/storage/scoring contracts.
 
 ### Software Interfaces and APIs
 
@@ -220,7 +220,7 @@ The inspected root LICENSE contains the Microsoft MIT notice. Preserve applicabl
 
 ## Requirements Traceability
 
-The configuration and storage modules have partial implementation evidence. Other paths below remain planned; the table does not establish full requirement completion. The same test IDs appear in the test plan.
+The configuration, storage, and scoring modules have component implementation evidence; their system integrations remain partial. Other paths below remain planned; the table does not establish full requirement completion. The same test IDs appear in the test plan.
 
 | Requirement ID | Source | Architecture / Design | Implementation | Verification |
 | --- | --- | --- | --- | --- |
@@ -284,8 +284,8 @@ description: "Initial project baseline for software requirements specification."
 document_type: "Software Requirements Specification (SRS)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.2"
-updated: "2026-10-07T19:39:33-04:00"
+version: "0.1.3"
+updated: "2026-10-07T21:07:12-04:00"
 toc: true
 tags: ["requirements", "srs", "portfolio"]
 -->

@@ -1,6 +1,6 @@
 # Local Run Storage | Implemented Contract
 
-W-02 now includes validated configuration, frozen run metadata, immutable prompt/sample records, and local integrity inspection. This increment stores supplied text; it does not generate or execute a bot, score a match, implement a live provider, or resume a scheduler.
+W-02 now includes validated configuration, frozen run metadata, immutable prompt/sample records, and local integrity inspection. This increment stores supplied text; it does not generate or execute a bot, implement a live provider, or resume a scheduler. [Offline scoring](./13_offline_scoring.md) is implemented separately for declared JSON result bundles.
 
 ## Initialize a Run
 
@@ -88,7 +88,7 @@ To add the real baseline later, supply its exact `text_hash()` as `fixed_context
 
 `add_sample(sample_id, prompt_id, phase=..., sample_index=..., request_id=..., response=..., source=..., status="unvalidated", reason=None)` preserves a caller-supplied result. The prompt must exist. Phase is `optimization` or `holdout`; the zero-based index is less than `samples_per_prompt`. A prompt/phase/index combination and a request ID each have at most one sample record. Exact repetition of the same ID/content is idempotent. Request IDs here do not implement a reservation or retry ledger.
 
-Status `unvalidated` requires nonempty source and no reason. Status `invalid` requires a nonempty reason; source may be null and the raw response may be empty. The store deliberately cannot certify a `valid` bot. Phase labels also do not enforce selection freeze or holdout scheduling; those are future coordinator gates.
+Status `unvalidated` requires nonempty source and no reason. Status `invalid` requires a nonempty reason; source may be null and the raw response may be empty. The store deliberately cannot certify a `valid` bot. The separate scorer accepts declared generation statuses without upgrading these stored records or independently validating source. Phase labels also do not enforce selection freeze or holdout scheduling; those are future coordinator gates.
 
 ## Publication and Interrupted Writes
 
@@ -104,6 +104,6 @@ File replacement requires a supporting local filesystem. Flushed file data and a
 
 Hashes detect accidental changes, missing indexed records, and incompatible context. They are not signatures: someone who changes both data and hashes can construct a different consistent archive. Source commit/game/API/system identities are declared configuration; only stored baseline text and local artifact bytes are matched in this increment. Actual repository/game provenance verification and full live-generation metadata remain future work.
 
-Provider secret lookup, source execution, scoring/report exports, request/event/slot ledgers, checkpointing, scheduler resume, holdout freeze, and live cost enforcement remain unimplemented. Raw text is local and unreviewed; the existing `runs/` ignore rule applies to the default path. A custom output path must be kept out of commits by the operator.
+Offline fitness calculation now exists separately, with JSON output to standard output. Provider secret lookup, source execution, report exports, request/event/slot ledgers, checkpointing, scheduler resume, holdout freeze, and live cost enforcement remain unimplemented. Raw text is local and unreviewed; the existing `runs/` ignore rule applies to the default path. A custom output path must be kept out of commits by the operator.
 
 See [execution evidence](./42_storage_validation.md) and [the broader test plan](./40_testing.md) for actual results and partial requirement coverage.

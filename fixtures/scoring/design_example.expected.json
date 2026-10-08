@@ -1,0 +1,22 @@
+{
+  "provenance": "synthetic",
+  "scheduled_slots": 200,
+  "played_matches": 200,
+  "wins": 145,
+  "losses": 55,
+  "draws": 0,
+  "synthetic_failures": 0,
+  "per_opponent_wins": [
+    46,
+    44,
+    45,
+    10
+  ],
+  "per_opponent_denominator": 50,
+  "overall_effective_win_rate": 0.725,
+  "overall_effective_win_rate_fraction": "29/40",
+  "worst_opponent_effective_win_rate": 0.2,
+  "worst_opponent_effective_win_rate_fraction": "1/5",
+  "fitness": 0.5675,
+  "fitness_fraction": "227/400"
+}

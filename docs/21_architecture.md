@@ -1,8 +1,8 @@
 # Slither Sam Prompt Evolver | Software Architecture Description
 
-**Document status:** Baseline revision 0.1.2. Configuration validation and local run storage have implementation/test evidence; other capabilities and full system acceptance remain unverified.
+**Document status:** Baseline revision 0.1.3. Configuration validation, local run storage, and offline scoring have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
-The configuration and evidence-store portions now exist. [Local storage](./12_local_storage.md) preserves frozen context and supplied artifacts without instantiating the planned provider, runner, scorer, or coordinator. The architectural trust boundaries and game isolation still need implementation and verification.
+The configuration, evidence-store, and pure offline scorer portions now exist. [Local storage](./12_local_storage.md) preserves frozen context and supplied artifacts without instantiating the planned provider, runner, or coordinator. The [scorer](./13_offline_scoring.md) separately validates declared result snapshots and computes complete-schedule fitness; it does not produce trusted outcomes. The architectural trust boundaries and game isolation still need implementation and verification.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -102,7 +102,7 @@ The capabilities are planning, generation, validation, evaluation, scoring, evol
 
 ### Module / Development View
 
-Planned package `src/slither_evolver/` contains `cli`, `config`, `orchestrator`, `budget`, `prompts`, `validation`, `evaluation`, `scoring`, `evolution`, `storage`, `reports`, `guided`, `replay`, `providers/`, and `runner/`. Domain logic depends on contracts, not provider SDKs. The configuration and storage modules plus offline dispatch in `__main__.py` are implemented. The remaining modules are targets; the unused program template has been removed.
+Planned package `src/slither_evolver/` contains `cli`, `config`, `orchestrator`, `budget`, `prompts`, `validation`, `evaluation`, `scoring`, `evolution`, `storage`, `reports`, `guided`, `replay`, `providers/`, and `runner/`. Domain logic depends on contracts, not provider SDKs. The configuration, storage, and scoring modules plus offline dispatch in `__main__.py` are implemented. The remaining modules are targets; the unused program template has been removed.
 
 ### Component-and-Connector / Runtime View
 
@@ -216,8 +216,8 @@ description: "Initial project baseline for software architecture description."
 document_type: "Software Architecture Description (SAD)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.2"
-updated: "2026-10-07T19:39:33-04:00"
+version: "0.1.3"
+updated: "2026-10-07T21:07:12-04:00"
 toc: true
 tags: ["architecture", "sad", "portfolio"]
 -->
