@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Software Design Description
 
-**Document status:** Baseline revision 0.1.3. Configuration validation, local run storage, and offline scoring have implementation/test evidence; other capabilities and full system acceptance remain unverified.
+**Document status:** Baseline revision 0.1.4. Configuration validation, local run storage, offline scoring, and declared-evidence report exports have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -214,11 +214,11 @@ Persist provenance and produce recalculable reports. Traces: FR-013–FR-014, FR
 
 #### Public Interface
 
-Implemented: RunStore.create/open, add_prompt/get_prompt, add_sample/get_sample, manifest, and verify; see [the storage contract](./12_local_storage.md). Planned: append_event(record), checkpoint(state), full verify_bundle, and report export.
+Implemented: RunStore.create/open, add_prompt/get_prompt, add_sample/get_sample, manifest, and verify; see [the storage contract](./12_local_storage.md). Implemented separately: `build_report`, `export_report`, and `verify_report` consume a frozen configuration and declared result bundles; see [the report contract](./14_reports.md). Planned: append_event(record), checkpoint(state), and integrated full verify_bundle.
 
 #### Internal Structure
 
-Implemented: exclusive per-run writer lock, frozen configuration/manifest, immutable hashed text/record files, and an atomic catalog of prompt/sample IDs and hashes. The catalog detects deleted records. Append-only events, checkpoints and the pure report builder remain planned.
+Implemented: exclusive per-run writer lock, frozen configuration/manifest, immutable hashed text/record files, and an atomic catalog of prompt/sample IDs and hashes. The catalog detects deleted records. The report builder and versioned archive exporter are implemented separately. Append-only events and checkpoints remain planned.
 
 #### Dependencies
 
@@ -226,7 +226,7 @@ Local filesystem, schema definitions, scorer; no live provider during report.
 
 #### Algorithms and Logic
 
-Implemented storage rejects conflicting IDs and duplicate sample slots/request IDs, verifies local hashes and lineage, and requires declared synthetic/manual/automated provenance. Interrupted publication blocks inspection when completion cannot be established. Terminal match IDs, escaped report markup and experimental-result separation remain future integrations.
+Implemented storage rejects conflicting IDs and duplicate sample slots/request IDs, verifies local hashes and lineage, and requires declared synthetic/manual/automated provenance. Interrupted publication blocks inspection when completion cannot be established. Declared slot IDs, escaped report markup, synthetic labels, and recalculation are implemented for result snapshots. Trusted match production and coordinator integration remain pending.
 
 #### Data Used or Produced
 
@@ -287,7 +287,7 @@ A Run owns a frozen configuration and profile. A Prompt owns strategy text and l
 
 ### Persistent Storage
 
-Implemented `runs/<run_id>/` contains manifest/configuration JSON, an atomic `catalog.json`, immutable `prompts/` and `samples/` JSON records, and exact text in content-addressed `artifacts/`. Each record is bound to the frozen manifest. Provenance labels are required; SHA-256 is integrity checking, not authentication. Initialization publishes the manifest last; record publication commits through the catalog. Uncommitted records and stale locks block verification without automatic repair. Planned additions are append-only `requests.jsonl`, `events.jsonl`, `slots.jsonl`, atomic `checkpoint.json`, trusted replay traces, and derived reports. Files are UTF-8. Artifact hashes identify exact content; new scoring versions create new reports rather than rewriting raw records.
+Implemented `runs/<run_id>/` contains manifest/configuration JSON, an atomic `catalog.json`, immutable `prompts/` and `samples/` JSON records, and exact text in content-addressed `artifacts/`. Each record is bound to the frozen manifest. Provenance labels are required; SHA-256 is integrity checking, not authentication. Initialization publishes the manifest last; record publication commits through the catalog. Uncommitted records and stale locks block verification without automatic repair. Planned additions are append-only `requests.jsonl`, `events.jsonl`, `slots.jsonl`, atomic `checkpoint.json`, and trusted replay traces. Declared-evidence reports currently use separate versioned directories containing configuration, result snapshots, derived formats, and hashes. Files are UTF-8. Artifact hashes identify exact content; new scoring versions create new reports rather than rewriting raw records.
 
 ### Data Flow and Transformation
 
@@ -297,7 +297,7 @@ Operator inputs become normalized configuration and a manifest. Provider respons
 
 ### User Interface Design
 
-Proposed command family: `python -m slither_evolver pilot --config PATH`, `evolve --config PATH`, `guided --input PATH --manifest PATH`, `replay --run PATH`, `report --run PATH`, and `resume --run PATH`. Each supports help. `pilot` plans work offline by default; explicit `--live` permits bounded generation when required settings exist. These experiment commands are targets for implementation. The first implemented command is `python -m slither_evolver validate --config PATH [--live]`; see [the configuration contract](./11_configuration.md). Implemented `init --config PATH --provenance KIND --description TEXT [--runs-dir PATH]` creates local evidence and `inspect --run PATH` verifies it. Neither command starts live work. Implemented `score --config PATH --results PATH` emits JSON for complete scoreable evidence and exit 5 without final fitness for valid incomplete/blocked evidence; malformed scoring input returns 2. All four offline commands are covered by tests; storage faults return exit 4.
+Proposed command family: `python -m slither_evolver pilot --config PATH`, `evolve --config PATH`, `guided --input PATH --manifest PATH`, `replay --run PATH`, `report --run PATH`, and `resume --run PATH`. Each supports help. `pilot` plans work offline by default; explicit `--live` permits bounded generation when required settings exist. These experiment commands are targets for implementation. The first implemented command is `python -m slither_evolver validate --config PATH [--live]`; see [the configuration contract](./11_configuration.md). Implemented `init --config PATH --provenance KIND --description TEXT [--runs-dir PATH]` creates local evidence and `inspect --run PATH` verifies it. Neither command starts live work. Implemented `score --config PATH --results PATH` emits JSON for complete scoreable evidence and exit 5 without final fitness for valid incomplete/blocked evidence; malformed scoring input returns 2. Implemented `report --config PATH --results PATH [--results PATH ...] --baseline ID --selected ID --output NEW_DIR` exports complete or explicitly partial declared evidence. `verify-report --report DIR` checks hashes and rebuilds every format. Successful partial export/verification returns 0 with partial status; report integrity/export errors return 4. All six offline commands are covered by tests; storage faults return exit 4.
 
 Exit statuses: 0 completed requested workflow; 2 invalid input; 3 missing dependency/isolation prerequisite; 4 external service/infrastructure failure; 5 bounded or operator stop. Messages identify what was saved and a recovery action. Report replay uses inert content only. Visual match watching is a separate trusted viewer workflow and may run only after execution isolation is verified.
 
@@ -397,8 +397,8 @@ description: "Initial project baseline for software design description."
 document_type: "Software Design Description (SDD)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.3"
-updated: "2026-10-07T21:07:12-04:00"
+version: "0.1.4"
+updated: "2026-10-08T07:10:16-04:00"
 toc: true
 tags: ["design", "sdd", "portfolio"]
 -->

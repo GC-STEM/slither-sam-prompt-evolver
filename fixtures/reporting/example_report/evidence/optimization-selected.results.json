@@ -1,0 +1,174 @@
+{
+  "configuration_hash": "d2aed42fd4a89f24cc5a0df3de554f700bed6f3e9ed99224da049f69928b285e",
+  "phase": "optimization",
+  "prompt_hash": "9fea6475534e5f6de9d2eaf24b106452810d22f41fd5dc57b0457697e465667c",
+  "prompt_id": "selected",
+  "provenance": {
+    "description": "Handwritten arithmetic fixture; no models, generated bots, or played games.",
+    "kind": "synthetic"
+  },
+  "results": [
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-a",
+      "opponent_source_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "outcome": "win",
+      "profile_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "reason": null,
+      "sample_id": "sample-0",
+      "seed": 0,
+      "slot_id": "793d53ab773e5934c941ec34360f0951adfb55389aa70d2e8d64c19eadab99e9",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-a",
+      "opponent_source_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "outcome": "win",
+      "profile_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "reason": null,
+      "sample_id": "sample-0",
+      "seed": 1,
+      "slot_id": "985fd249356ee99150392b3d163745f6ea1baac00077033a88947116e5679ee9",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-a",
+      "opponent_source_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "outcome": "win",
+      "profile_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "reason": null,
+      "sample_id": "sample-0",
+      "seed": 2,
+      "slot_id": "08885647a7c8187d41f3f9189964a2705486338bf6a7305097daba407fbca7e8",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-b",
+      "opponent_source_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+      "outcome": "win",
+      "profile_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "reason": null,
+      "sample_id": "sample-0",
+      "seed": 0,
+      "slot_id": "3907ac3213bcf465c15a14443c574db0656f299a4887339ae452745d9b377b54",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-b",
+      "opponent_source_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+      "outcome": "win",
+      "profile_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "reason": null,
+      "sample_id": "sample-0",
+      "seed": 1,
+      "slot_id": "c4c6e12814a1b8df6038a0992283163d4d2262e09b358bbbeccddb0398bd880c",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-b",
+      "opponent_source_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+      "outcome": "win",
+      "profile_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "reason": null,
+      "sample_id": "sample-0",
+      "seed": 2,
+      "slot_id": "74de9c8905d44803957fcf5117e956df244d3ce86fbd4eb2325d24794a46cf0c",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-a",
+      "opponent_source_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "outcome": "win",
+      "profile_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "reason": null,
+      "sample_id": "sample-1",
+      "seed": 0,
+      "slot_id": "578ca541213041fc0dd2538550bb87677f124135fa3edbb4fb940ccbcaf1e480",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-a",
+      "opponent_source_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "outcome": "win",
+      "profile_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "reason": null,
+      "sample_id": "sample-1",
+      "seed": 1,
+      "slot_id": "91d1853f8d26dbb6ed42ad549c7218dbd4dc97871b2d4792dbfdecb753b54f83",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-a",
+      "opponent_source_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "outcome": "loss",
+      "profile_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "reason": null,
+      "sample_id": "sample-1",
+      "seed": 2,
+      "slot_id": "d5af5dd356ffaa833ae1b666b28e7ab5c273ebdbf91e0c4a97dc9958e223f63d",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-b",
+      "opponent_source_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+      "outcome": "win",
+      "profile_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "reason": null,
+      "sample_id": "sample-1",
+      "seed": 0,
+      "slot_id": "b82ac81dbb76ec709408f38d19da806d1fcda4a1d994a9af4f74c0d6096e874e",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-b",
+      "opponent_source_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+      "outcome": "loss",
+      "profile_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "reason": null,
+      "sample_id": "sample-1",
+      "seed": 1,
+      "slot_id": "c4043f2cb6eebe2561493d241240c23fdf15abfea2f50b9af21a940bfd50fa0f",
+      "status": "played"
+    },
+    {
+      "cause": null,
+      "opponent_id": "synthetic-opponent-b",
+      "opponent_source_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+      "outcome": "loss",
+      "profile_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "reason": null,
+      "sample_id": "sample-1",
+      "seed": 2,
+      "slot_id": "9fe1e687eb832aa4bc3476f3e22d07d6596d84b4ef896cd04d3d710c0aa8dcde",
+      "status": "played"
+    }
+  ],
+  "run_id": "synthetic-report-example",
+  "samples": [
+    {
+      "generation_status": "accepted",
+      "reason": null,
+      "sample_id": "sample-0",
+      "sample_index": 0,
+      "source_hash": "57c3c5ac0ae13c95873be50b5ffe2d302733ac51004fcc9b2ce3b9521fae04e8"
+    },
+    {
+      "generation_status": "accepted",
+      "reason": null,
+      "sample_id": "sample-1",
+      "sample_index": 1,
+      "source_hash": "d4109f01a833c5f8cb9607d1c2192942df677d5b42bbfe0abf8ed12639028ae2"
+    }
+  ],
+  "schema_version": 1
+}

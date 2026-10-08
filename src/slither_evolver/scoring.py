@@ -325,6 +325,21 @@ def _ratio(value):
     return f"{value.numerator}/{value.denominator}"
 
 
+def validate_results(config: RunConfig, document) -> ScoringInput:
+    """Validate declared records even when their schedule is incomplete.
+
+    Reporting uses this contract to preserve partial evidence without
+    assigning fitness. This does not certify source or trusted outcomes.
+    """
+    if not isinstance(config, RunConfig):
+        raise ScoringError("config: expected a validated RunConfig")
+    try:
+        config = validate_config(config.to_dict())
+    except ConfigError as error:
+        raise ScoringError(f"config: {error}") from None
+    return _parse_input(config, document)
+
+
 def score_results(config: RunConfig, document) -> FitnessResult:
     """Compute fitness only for a complete, compatible, scoreable schedule.
 

@@ -1,0 +1,68 @@
+{
+  "budget": {
+    "currency": null,
+    "max_cost": null,
+    "max_request_cost": null,
+    "max_requests": null,
+    "pricing_version": null
+  },
+  "fixed_context": {
+    "api_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "baseline_prompt_hash": "038afc491c23976e5a190300662bd128ba104a615fa43ae3e9aeb9a747d6d1e0",
+    "game_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "source_commit": "0000000000000000000000000000000000000000",
+    "system_prompt_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "generation_count": 2,
+  "holdout_seeds": [
+    100,
+    101
+  ],
+  "limits": {
+    "decision_timeout_ms": 100,
+    "match_timeout_seconds": 10,
+    "max_frames": 1000,
+    "max_message_bytes": 10000,
+    "max_prompt_chars": 2000,
+    "max_response_bytes": 20000,
+    "max_run_seconds": 60,
+    "max_source_bytes": 10000,
+    "memory_mb": 128
+  },
+  "mode": "pilot",
+  "opponents": [
+    {
+      "id": "synthetic-opponent-a",
+      "profile_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "source_hash": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "id": "synthetic-opponent-b",
+      "profile_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "source_hash": "3333333333333333333333333333333333333333333333333333333333333333"
+    }
+  ],
+  "optimization_seeds": [
+    0,
+    1,
+    2
+  ],
+  "population_size": 4,
+  "provider": null,
+  "run_id": "synthetic-report-example",
+  "samples_per_prompt": 2,
+  "schema_version": 1,
+  "scoring": {
+    "overall_weight": 0.7,
+    "version": 1,
+    "worst_weight": 0.3
+  },
+  "search": {
+    "crossover_probability": 0.3,
+    "elite_count": 1,
+    "max_population_attempts": 20,
+    "mutation_probability": 0.7,
+    "seed": 7,
+    "tournament_size": 2
+  }
+}

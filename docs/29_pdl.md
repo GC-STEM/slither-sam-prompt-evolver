@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Program Design Language
 
-**Document status:** Baseline revision 0.1.3. Configuration validation, local run storage, and offline scoring have implementation/test evidence; other capabilities and full system acceptance remain unverified.
+**Document status:** Baseline revision 0.1.4. Configuration validation, local run storage, offline scoring, and declared-evidence report exports have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -19,13 +19,13 @@
 
 ## Purpose and Scope
 
-The source `29_pdl.md` was empty. This project-specific PDL refines the language-independent pseudocode into implementation-oriented responsibilities without supplying executable source. The proposed construction organization uses Python for control and JavaScript for game decisions; functions below are planned interfaces except the configuration, local storage, and offline scoring operations identified here.
+The source `29_pdl.md` was empty. This project-specific PDL refines the language-independent pseudocode into implementation-oriented responsibilities without supplying executable source. The proposed construction organization uses Python for control and JavaScript for game decisions; functions below are planned interfaces except the configuration, local storage, offline scoring, and report operations identified here.
 
 PDL uses indentation, named records, IF/ELSE, FOR/WHILE, REQUIRE, RETURN and LET. It describes intent and invariants rather than a specific language's syntax. The high-level algorithm remains in [26_pseudocode.txt](./26_pseudocode.txt).
 
 ## Entry Points and Dispatch
 
-Implemented dispatch handles `validate`, `init`, `inspect`, and `score`. Initialization revalidates configuration, requires a provenance label, and publishes a local manifest. Inspection verifies existing evidence without loading a provider or executing source. Scoring validates declared JSON samples/results and requires complete scoreable schedules; it emits no final fitness for missing/blocked evidence. The following dispatcher describes the future experiment coordinator.
+Implemented dispatch handles `validate`, `init`, `inspect`, `score`, `report`, and `verify-report`. Initialization revalidates configuration, requires a provenance label, and publishes a local manifest. Inspection verifies existing evidence without loading a provider or executing source. Scoring validates declared JSON samples/results and requires complete scoreable schedules; it emits no final fitness for missing/blocked evidence. Reporting validates one through four declared bundles, enforces baseline/context compatibility, recomputes complete scores, preserves partial blockers, applies known-pattern export checks, and stages consistent formats before publication. Verification hashes files and reconstructs all formats from the archived inputs. The following dispatcher describes the future experiment coordinator.
 
 ```text
 PROCEDURE main(arguments)
@@ -62,7 +62,7 @@ Offline modes must not construct a live provider or execute stored bot source. E
 | evolution.next | Ranked prompts + RNG/config → Population | Strategy-only changes; bounded search; E < P | PopulationError with operation evidence |
 | RunStore.create/open/add/get/verify | Valid config or supplied text → frozen local evidence | Existing IDs immutable; content/metadata hashes checked; incomplete catalog blocked | StorageError; no external execution |
 | storage.checkpoint | Valid state → durable snapshot | Single writer; atomic replacement | StorageFault; scheduling suspends |
-| reports.export | Verified records → Markdown/JSON/CSV | Recalculate; safe content; full provenance | InvalidBundle or UnsafeExport |
+| build_report / export_report / verify_report | Frozen config + declared phase snapshots → consistent Markdown/JSON/CSV archive | Recalculate complete scores; retain partial blockers; known-pattern gate; escaped Markdown/CSV notes; canonical evidence and hashes | ReportError; no overwrite; provenance remains declared |
 | guided.import | CSV + manual manifest → ManualBundle | Unique records; unknown seed explicit | InvalidImport; no provider call |
 | replay.display | Verified stored events → inert view | Escaped data; no source loading | InvalidBundle; no model/bot execution |
 
@@ -183,8 +183,8 @@ description: "Initial project baseline for program design language."
 document_type: "Program Design Language (PDL)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.3"
-updated: "2026-10-07T21:07:12-04:00"
+version: "0.1.4"
+updated: "2026-10-08T07:10:16-04:00"
 toc: true
 tags: ["pdl", "algorithms", "portfolio"]
 -->

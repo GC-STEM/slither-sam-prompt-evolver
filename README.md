@@ -5,7 +5,7 @@
 This project asks: **Can an evolutionary algorithm improve the strategy prompt used to generate a SnakeBot?** It is planned as a supplement to an Hour of AI session in December 2026 and as an independent professional portfolio project.
 
 > [!IMPORTANT]
-> **Current status: requirements/design baseline plus implemented configuration validation, local run storage, and offline scoring.** The remaining SDLC capabilities describe planned software. Automated tournaments, live-provider integration, isolation, and recorded-session results still require implementation and verification. The offline increments have verified tests; no experimental improvement or passing system acceptance is claimed.
+> **Current status: requirements/design baseline plus implemented configuration validation, local run storage, offline scoring, and report exports.** The remaining SDLC capabilities describe planned software. Automated tournaments, live-provider integration, isolation, and recorded-session results still require implementation and verification. The offline increments have verified tests; no experimental improvement or passing system acceptance is claimed.
 
 ## Project Goals
 
@@ -91,7 +91,7 @@ Run the standard-library tests:
 PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
-All 87 tests (26 configuration, 35 storage, and 26 scoring) passed on Ubuntu 24.04.3 with Python 3.12.14. Tournaments, the report workflow, and the experiment coordinator remain planned. Full scheduler recovery is not implemented.
+All 122 tests (26 configuration, 35 storage, 26 scoring, and 35 reporting) passed on Ubuntu 24.04.3 with Python 3.12.14. Declared-evidence reporting is implemented; tournaments and the experiment coordinator remain planned. Full scheduler recovery is not implemented.
 
 ## Local Run Storage
 
@@ -130,29 +130,24 @@ Scoring requires every configured sample/opponent/seed slot exactly once. Invali
 
 [Scoring/result contract](./docs/13_offline_scoring.md) · [Actual scoring evidence](./docs/43_scoring_validation.md)
 
-## Offline Scoring
+## Evidence Reports
 
-Run the independently checked arithmetic example:
-
-```bash
-PYTHONPATH=src python examples/scoring_demo.py
-```
-
-Expected synthetic fitness: **0.5675**, exactly **227/400**. No actual games or provider requests occur. For the complete JSON summary:
+Export and independently recalculate the synthetic comparison example:
 
 ```bash
-PYTHONPATH=src python -m slither_evolver score \
-  --config fixtures/scoring/design_example.config.json \
-  --results fixtures/scoring/design_example.results.json
+PYTHONPATH=src python examples/report_demo.py --output runs/synthetic-report-demo
+PYTHONPATH=src python -m slither_evolver verify-report --report runs/synthetic-report-demo
 ```
 
-Scoring requires every configured sample/opponent/seed slot exactly once. Invalid-generation exposures count as synthetic zero-credit slots; missing results, infrastructure faults, and interruptions block final fitness. Provenance labels stay in the summary.
+Open `runs/synthetic-report-demo/report.md` to review it. The directory also contains JSON, CSV, the frozen configuration, archived slot evidence, and file hashes. Existing report directories are preserved; choose a new output name when repeating the demo.
 
-[Scoring/result contract](./docs/13_offline_scoring.md) · [Actual scoring evidence](./docs/43_scoring_validation.md)
+A checked-in [synthetic example report](./fixtures/reporting/example_report/report.md) is available without running commands. Its handwritten comparisons are arithmetic fixtures, with no actual model requests or played games. Partial reports retain missing evidence and null final scores; they do not imply a completed experiment.
+
+[Report contract and commands](./docs/14_reports.md) · [Actual reporting evidence](./docs/44_report_validation.md)
 
 ## Getting Started
 
-Start with the original [Slither Slam activity](https://aka.ms/slither-slam), then read the project overview and requirements. The validation, initialization, inspection, and scoring commands above are implemented. Experiment runtime setup and the other command names in the design documents remain proposed until their implementation and pilot verification.
+Start with the original [Slither Slam activity](https://aka.ms/slither-slam), then read the project overview and requirements. The validation, initialization, inspection, scoring, reporting, and report-verification commands above are implemented. Experiment runtime setup and the other command names in the design documents remain proposed until their implementation and pilot verification.
 
 The December session can use manual observations or genuine recorded results if live automation is unavailable. Those real bundles must be produced and reviewed during construction; synthetic fixtures cannot substitute for claimed experimental findings.
 

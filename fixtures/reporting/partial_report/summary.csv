@@ -1,0 +1,2 @@
+run_id,provenance,phase,role,prompt_id,prompt_hash,status,scheduled_slots,recorded_slots,missing_slots,played_matches,wins,losses,draws,bot_faults,synthetic_failures,infrastructure_faults,interrupted_slots,accepted_samples,invalid_samples,fitness,fitness_fraction
+synthetic-report-example,synthetic,optimization,baseline,baseline,038afc491c23976e5a190300662bd128ba104a615fa43ae3e9aeb9a747d6d1e0,partial,12,11,1,11,6,5,0,0,0,0,0,2,0,,

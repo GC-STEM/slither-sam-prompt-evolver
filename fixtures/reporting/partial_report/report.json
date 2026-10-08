@@ -1,0 +1,175 @@
+{
+  "baseline_id": "baseline",
+  "comparisons": [
+    {
+      "fitness_delta": null,
+      "fitness_delta_fraction": null,
+      "phase": "optimization",
+      "shared_prompt_identity": false,
+      "status": "unavailable"
+    },
+    {
+      "fitness_delta": null,
+      "fitness_delta_fraction": null,
+      "phase": "holdout",
+      "shared_prompt_identity": false,
+      "status": "unavailable"
+    }
+  ],
+  "configuration_hash": "d2aed42fd4a89f24cc5a0df3de554f700bed6f3e9ed99224da049f69928b285e",
+  "entries": [
+    {
+      "accepted_samples": 2,
+      "blockers": {
+        "blocked_samples": 0,
+        "infrastructure_faults": 0,
+        "interrupted_slots": 0,
+        "missing_samples": 0,
+        "missing_slots": 1
+      },
+      "counts": {
+        "bot_faults": 0,
+        "draws": 0,
+        "infrastructure_faults": 0,
+        "interrupted_slots": 0,
+        "losses": 5,
+        "missing_slots": 1,
+        "played_matches": 11,
+        "recorded_slots": 11,
+        "scheduled_slots": 12,
+        "synthetic_failures": 0,
+        "wins": 6
+      },
+      "declared_samples": 2,
+      "invalid_samples": 0,
+      "opponents": [
+        {
+          "counts": {
+            "bot_faults": 0,
+            "draws": 0,
+            "infrastructure_faults": 0,
+            "interrupted_slots": 0,
+            "losses": 2,
+            "missing_slots": 0,
+            "played_matches": 6,
+            "recorded_slots": 6,
+            "scheduled_slots": 6,
+            "synthetic_failures": 0,
+            "wins": 4
+          },
+          "opponent_id": "synthetic-opponent-a",
+          "profile_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+          "source_hash": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        {
+          "counts": {
+            "bot_faults": 0,
+            "draws": 0,
+            "infrastructure_faults": 0,
+            "interrupted_slots": 0,
+            "losses": 3,
+            "missing_slots": 1,
+            "played_matches": 5,
+            "recorded_slots": 5,
+            "scheduled_slots": 6,
+            "synthetic_failures": 0,
+            "wins": 2
+          },
+          "opponent_id": "synthetic-opponent-b",
+          "profile_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+          "source_hash": "3333333333333333333333333333333333333333333333333333333333333333"
+        }
+      ],
+      "phase": "optimization",
+      "prompt_hash": "038afc491c23976e5a190300662bd128ba104a615fa43ae3e9aeb9a747d6d1e0",
+      "prompt_id": "baseline",
+      "provenance": {
+        "description": "Handwritten arithmetic fixture; no models, generated bots, or played games.",
+        "kind": "synthetic"
+      },
+      "role": "baseline",
+      "samples": [
+        {
+          "counts": {
+            "bot_faults": 0,
+            "draws": 0,
+            "infrastructure_faults": 0,
+            "interrupted_slots": 0,
+            "losses": 1,
+            "missing_slots": 0,
+            "played_matches": 6,
+            "recorded_slots": 6,
+            "scheduled_slots": 6,
+            "synthetic_failures": 0,
+            "wins": 5
+          },
+          "generation_status": "accepted",
+          "reason": null,
+          "sample_id": "sample-0",
+          "sample_index": 0,
+          "source_hash": "0fac90c0febe1650c5e88cc7f0549e1a20884845eb5f8a1a96929a981b001597"
+        },
+        {
+          "counts": {
+            "bot_faults": 0,
+            "draws": 0,
+            "infrastructure_faults": 0,
+            "interrupted_slots": 0,
+            "losses": 4,
+            "missing_slots": 1,
+            "played_matches": 5,
+            "recorded_slots": 5,
+            "scheduled_slots": 6,
+            "synthetic_failures": 0,
+            "wins": 1
+          },
+          "generation_status": "accepted",
+          "reason": null,
+          "sample_id": "sample-1",
+          "sample_index": 1,
+          "source_hash": "bc9cb925143c7d1101c044a8b2d85d3f962c8dd529de3947086a453a87f4c80f"
+        }
+      ],
+      "score": null,
+      "status": "partial"
+    }
+  ],
+  "inputs": [
+    {
+      "file": "evidence/optimization-baseline.results.json",
+      "phase": "optimization",
+      "prompt_id": "baseline",
+      "sha256": "746f33ba3b3a9c411f6bc4fb640556e21b8e6ea69ccf1f856df56025f1fce483"
+    }
+  ],
+  "limitations": [
+    "SYNTHETIC: these are arithmetic fixtures, not actual played games or experiment findings.",
+    "Completion means the declared coordinate schedules are complete; it is not system acceptance.",
+    "Provenance, accepted generation, and outcomes are declarations; no source or game is executed by this exporter.",
+    "Independent model sampling, selection freeze, fresh holdout generation, and trusted runner outcomes are not established here.",
+    "Shared source samples/seeds and small workloads limit statistical interpretation; no confidence intervals or significance claims are made.",
+    "Provider usage/cost, elapsed time, lineage search, and parity/isolation evidence are unavailable in this result schema.",
+    "Raw text still needs human review; automated export checks cover known patterns only."
+  ],
+  "missing_evidence": [
+    {
+      "phase": "optimization",
+      "prompt_id": "selected"
+    },
+    {
+      "phase": "holdout",
+      "prompt_id": "baseline"
+    },
+    {
+      "phase": "holdout",
+      "prompt_id": "selected"
+    }
+  ],
+  "provenance_kind": "synthetic",
+  "report_schema_version": 1,
+  "run_id": "synthetic-report-example",
+  "same_strategy_hash": null,
+  "scoring_version": 1,
+  "selected_id": "selected",
+  "status": "partial"
+}

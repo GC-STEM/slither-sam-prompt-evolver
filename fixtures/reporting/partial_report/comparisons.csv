@@ -1,0 +1,3 @@
+run_id,provenance,baseline_id,selected_id,phase,status,fitness_delta,fitness_delta_fraction,shared_prompt_identity
+synthetic-report-example,synthetic,baseline,selected,optimization,unavailable,,,False
+synthetic-report-example,synthetic,baseline,selected,holdout,unavailable,,,False
