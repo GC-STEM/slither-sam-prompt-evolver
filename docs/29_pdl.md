@@ -1,29 +1,31 @@
 # Slither Sam Prompt Evolver | Program Design Language
 
-**Document status:** Initial design baseline, version 0.1.0. Describes planned software; implementation and execution evidence are not claimed.
+**Document status:** Baseline revision 0.1.2. Configuration validation and local run storage have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
 
-- [Purpose and Scope](#purpose-and-scope)
-- [Entry Points and Dispatch](#entry-points-and-dispatch)
-- [Module Contracts and Refinement](#module-contracts-and-refinement)
-- [Generation and Cost Gate](#generation-and-cost-gate)
-- [Trusted Game and Worker Boundary](#trusted-game-and-worker-boundary)
-- [Scoring and Evidence Invariants](#scoring-and-evidence-invariants)
-- [Search Refinement](#search-refinement)
-- [States, Stops and Recovery](#states-stops-and-recovery)
-- [Implementation and Test Traceability](#implementation-and-test-traceability)
-- [Open Implementation Decisions](#open-implementation-decisions)
-- [References](#references)
+* [Purpose and Scope](#purpose-and-scope)
+* [Entry Points and Dispatch](#entry-points-and-dispatch)
+* [Module Contracts and Refinement](#module-contracts-and-refinement)
+* [Generation and Cost Gate](#generation-and-cost-gate)
+* [Trusted Game and Worker Boundary](#trusted-game-and-worker-boundary)
+* [Scoring and Evidence Invariants](#scoring-and-evidence-invariants)
+* [Search Refinement](#search-refinement)
+* [States, Stops and Recovery](#states-stops-and-recovery)
+* [Implementation and Test Traceability](#implementation-and-test-traceability)
+* [Open Implementation Decisions](#open-implementation-decisions)
+* [References](#references)
 
 ## Purpose and Scope
 
-The source `29_pdl.md` was empty. This project-specific PDL refines the language-independent pseudocode into implementation-oriented responsibilities without supplying executable source. The proposed construction organization uses Python for control and JavaScript for game decisions; functions below are planned interfaces.
+The source `29_pdl.md` was empty. This project-specific PDL refines the language-independent pseudocode into implementation-oriented responsibilities without supplying executable source. The proposed construction organization uses Python for control and JavaScript for game decisions; functions below are planned interfaces except the configuration and local storage operations identified here.
 
 PDL uses indentation, named records, IF/ELSE, FOR/WHILE, REQUIRE, RETURN and LET. It describes intent and invariants rather than a specific language's syntax. The high-level algorithm remains in [26_pseudocode.txt](./26_pseudocode.txt).
 
 ## Entry Points and Dispatch
+
+Implemented dispatch handles `validate`, `init`, and `inspect`. Initialization revalidates configuration, requires a provenance label, and publishes a local manifest. Inspection verifies existing evidence without loading a provider or executing source. The following dispatcher describes the future experiment coordinator.
 
 ```text
 PROCEDURE main(arguments)
@@ -58,6 +60,7 @@ Offline modes must not construct a live provider or execute stored bot source. E
 | runner.evaluate | MatchRequest → MatchResult | Verified isolation/profile; action-only worker messages | bot_fault versus engine/isolation_fault |
 | scoring.score | Complete scoreable slots → FitnessResult | Every scheduled denominator represented | IncompleteEvidence; no final score |
 | evolution.next | Ranked prompts + RNG/config → Population | Strategy-only changes; bounded search; E < P | PopulationError with operation evidence |
+| RunStore.create/open/add/get/verify | Valid config or supplied text → frozen local evidence | Existing IDs immutable; content/metadata hashes checked; incomplete catalog blocked | StorageError; no external execution |
 | storage.checkpoint | Valid state → durable snapshot | Single writer; atomic replacement | StorageFault; scheduling suspends |
 | reports.export | Verified records → Markdown/JSON/CSV | Recalculate; safe content; full provenance | InvalidBundle or UnsafeExport |
 | guided.import | CSV + manual manifest → ManualBundle | Unique records; unknown seed explicit | InvalidImport; no provider call |
@@ -146,7 +149,9 @@ Instruction-fragment operations are an initial project design choice, not a mand
 
 State transitions match [Design](./20_design.md#state-and-mode-behavior). Request/spending limits prohibit new paid requests; generation limits prohibit another optimization population; elapsed-time/operator stop suspends all new work. Completed evidence can still be saved and reported. An unfinished generation or holdout is explicitly partial.
 
-Resume validates manifest/profile/schema hashes, rebuilds completed slot IDs from durable records, retains uncertain request reservations, restores search state, and schedules only compatible unfinished work. Unknown paid-request status requires reconciliation or a retained worst-case reservation before a separately bounded retry.
+Local `open(expected_config=...)` now verifies frozen configuration equality, catalog membership, artifact hashes, baseline identity, and lineage. This opens evidence; it does not resume work. Write locks and incomplete commits block access for review; injected fault tests are partial evidence, not process-kill recovery.
+
+Planned scheduler resume validates manifest/profile/schema hashes, rebuilds completed slot IDs from durable records, retains uncertain request reservations, restores search state, and schedules only compatible unfinished work. Unknown paid-request status requires reconciliation or a retained worst-case reservation before a separately bounded retry.
 
 ## Implementation and Test Traceability
 
@@ -165,10 +170,10 @@ Select and verify provider SDK/client, exact runtime/tool versions, isolation ar
 
 ## References
 
-- [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
-- [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
-- [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
-- [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
+* [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
+* [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
+* [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
+* [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
 
 <!--
 title: "Slither Sam Prompt Evolver | Program Design Language"
@@ -176,8 +181,8 @@ description: "Initial project baseline for program design language."
 document_type: "Program Design Language (PDL)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.0"
-updated: "2026-10-07T16:12:51-04:00"
+version: "0.1.2"
+updated: "2026-10-07T19:39:33-04:00"
 toc: true
 tags: ["pdl", "algorithms", "portfolio"]
 -->

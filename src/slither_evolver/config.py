@@ -116,7 +116,7 @@ def _to_json(value: Any) -> Any:
     if isinstance(value, tuple):
         return [_to_json(item) for item in value]
     if isinstance(value, Decimal):
-        return str(value)
+        return format(value, "f")
     return value
 
 

@@ -1,6 +1,6 @@
 # Experiment Configuration | Implemented Contract
 
-This first construction increment implements `FR-001` configuration validation. It includes an immutable `RunConfig`, strict UTF-8 JSON loading, a synthetic offline example, and a validation command. Generation, tournament execution, scoring, storage, and reports remain planned.
+This first construction increment implements `FR-001` configuration validation. It includes an immutable `RunConfig`, strict UTF-8 JSON loading, a synthetic offline example, and a validation command. Local storage is now implemented separately in [its contract](./12_local_storage.md). Generation, tournament execution, scoring, and reports remain planned.
 
 ## Run the Validator
 
@@ -35,7 +35,7 @@ All fields shown in [offline.example.json](../configs/offline.example.json) are 
 | --- | --- |
 | `schema_version` | Integer `1`. Boolean values are not integers in this contract. |
 | `run_id` | 1–64 ASCII letters/digits/underscores/hyphens; starts with a letter or digit; cannot be a path. |
-| `mode` | `pilot` or `evolve`. These describe future experiment workflows; this increment implements only `validate`. Guided/replay imports will have separate input contracts. |
+| `mode` | `pilot` or `evolve`. These describe future experiment workflows; the current offline interface implements `validate`, `init`, and `inspect`. Guided/replay imports will have separate input contracts. |
 | `population_size` | Integer at least 2. |
 | `generation_count`, `samples_per_prompt` | Positive integers; generation count includes generation zero. |
 | `search.elite_count` | Integer from 1 through population size minus 1. |
@@ -60,11 +60,11 @@ Ordinary integer fields cannot exceed 2^53 − 1, avoiding integers that cannot 
 
 Required fields when the object is supplied:
 
-- `adapter`: identifier following the run-ID rules.
-- `model`: nonempty string without surrounding whitespace or control characters.
-- `credential_env`: an environment-variable **name**, such as `PROJECT_LLM_KEY`, never the credential value.
-- `max_output_tokens`: positive integer.
-- `settings`: adapter-owned JSON object with finite values. This is the one extension point that accepts provider-specific keys. Nested objects/arrays are copied into immutable mappings/tuples.
+* `adapter`: identifier following the run-ID rules.
+* `model`: nonempty string without surrounding whitespace or control characters.
+* `credential_env`: an environment-variable **name**, such as `PROJECT_LLM_KEY`, never the credential value.
+* `max_output_tokens`: positive integer.
+* `settings`: adapter-owned JSON object with finite values. This is the one extension point that accepts provider-specific keys. Nested objects/arrays are copied into immutable mappings/tuples.
 
 Common credential fields such as `api_key`, `authorization`, and `access_token` are rejected in settings. This is a useful guard, not a general secret-detection guarantee: only put nonsensitive generation settings here. Values are not echoed in diagnostics. The validator never looks up the named environment variable.
 
@@ -72,13 +72,13 @@ Common credential fields such as `api_key`, `authorization`, and `access_token` 
 
 All fields are required, and may be null during offline planning:
 
-- `max_requests`: positive integer when supplied.
-- `max_cost`: positive finite monetary amount when supplied.
-- `currency`: three uppercase letters when supplied; use the currency matching the provider's pricing.
-- `max_request_cost`: positive conservative per-request upper bound, in the same currency, not exceeding `max_cost`.
-- `pricing_version`: nonempty string identifying the operator's pricing/bound basis.
+* `max_requests`: positive integer when supplied.
+* `max_cost`: positive finite monetary amount when supplied.
+* `currency`: three uppercase letters when supplied; use the currency matching the provider's pricing.
+* `max_request_cost`: positive conservative per-request upper bound, in the same currency, not exceeding `max_cost`.
+* `pricing_version`: nonempty string identifying the operator's pricing/bound basis.
 
-Prefer plain decimal strings for monetary amounts, such as `"0.10"`, to preserve precision. Numeric inputs are accepted and normalized to decimal amounts. Exported snapshots use strings for money. Strings cannot contain whitespace, signs, exponents, underscores, or nonfinite values.
+Prefer plain decimal strings for monetary amounts, such as `"0.10"`, to preserve precision. Numeric inputs are accepted and normalized to decimal amounts. Exported snapshots use plain decimal strings for money, including small numeric inputs that originally used exponent notation. Strings cannot contain whitespace, signs, exponents, underscores, or nonfinite values.
 
 Live-readiness validation requires a complete provider object and every budget field to be non-null. The validator does not check current prices, ensure a supplied bound is conservative, reserve spending, or claim that the complete experiment fits its cap. Those responsibilities belong to the future provider/budget increment.
 
@@ -92,7 +92,7 @@ print(config.samples_per_prompt)
 snapshot = config.to_dict()
 ```
 
-`validate_config(document, live=False)` validates an already-loaded dictionary. `load_config(path, live=False)` additionally checks the JSON file. Invalid inputs raise `ConfigError`. Records, nested provider settings, opponent lists, and seed lists are immutable. `to_dict()` returns a detached JSON-compatible snapshot, not a saved run manifest.
+`validate_config(document, live=False)` validates an already-loaded dictionary. `load_config(path, live=False)` additionally checks the JSON file. Invalid inputs raise `ConfigError`. Records, nested provider settings, opponent lists, and seed lists are immutable. `to_dict()` returns a detached JSON-compatible snapshot. The storage module separately persists a configuration and run manifest.
 
 Hash validation checks format only; matching hashes to real files and verifying runner isolation are future gates. Source strings, environment-variable names, and adapter names are data and are not executed or imported.
 
@@ -106,8 +106,8 @@ No package installation, credentials, model requests, or game execution are requ
 
 ## Traceability
 
-- [Requirements](./10_requirements.md): FR-001; supporting safeguards for FR-017, FR-018, and NFR-001.
-- [Design](./20_design.md): configuration, immutable records, finite limits, and proposed command interfaces.
-- [Test plan](./40_testing.md): TC-001 validation assertions; downstream manifest/live execution integration remains pending.
+* [Requirements](./10_requirements.md): FR-001; supporting safeguards for FR-017, FR-018, and NFR-001.
+* [Design](./20_design.md): configuration, immutable records, finite limits, and proposed command interfaces.
+* [Test plan](./40_testing.md): TC-001 validation assertions; downstream manifest/live execution integration remains pending.
 
 Implementation and tests were prepared with AI assistance and verified through the recorded tests and command checks. Future provider/model, cap, scale, and runtime choices remain pilot decisions.

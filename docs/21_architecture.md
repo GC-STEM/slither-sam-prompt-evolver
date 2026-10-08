@@ -1,24 +1,26 @@
 # Slither Sam Prompt Evolver | Software Architecture Description
 
-**Document status:** Initial design baseline, version 0.1.0. Describes planned software; implementation and execution evidence are not claimed.
+**Document status:** Baseline revision 0.1.2. Configuration validation and local run storage have implementation/test evidence; other capabilities and full system acceptance remain unverified.
+
+The configuration and evidence-store portions now exist. [Local storage](./12_local_storage.md) preserves frozen context and supplied artifacts without instantiating the planned provider, runner, scorer, or coordinator. The architectural trust boundaries and game isolation still need implementation and verification.
 
 <!-- omit from toc -->
 ## Table of Contents
 
-- [Purpose and Scope](#purpose-and-scope)
-- [Architecture Context](#architecture-context)
-- [Architecture Overview](#architecture-overview)
-- [Architecture Views](#architecture-views)
-- [Interfaces and Integration](#interfaces-and-integration)
-- [Quality Attribute Strategies](#quality-attribute-strategies)
-- [Technology Stack and Platform Decisions](#technology-stack-and-platform-decisions)
-- [Dependencies and Supply-Chain Considerations](#dependencies-and-supply-chain-considerations)
-- [Architectural Decisions and Rationale](#architectural-decisions-and-rationale)
-- [Architecture Risks and Technical Debt](#architecture-risks-and-technical-debt)
-- [Architecture Evaluation](#architecture-evaluation)
-- [Traceability to Detailed Design and Testing](#traceability-to-detailed-design-and-testing)
-- [Open Issues](#open-issues)
-- [References](#references)
+* [Purpose and Scope](#purpose-and-scope)
+* [Architecture Context](#architecture-context)
+* [Architecture Overview](#architecture-overview)
+* [Architecture Views](#architecture-views)
+* [Interfaces and Integration](#interfaces-and-integration)
+* [Quality Attribute Strategies](#quality-attribute-strategies)
+* [Technology Stack and Platform Decisions](#technology-stack-and-platform-decisions)
+* [Dependencies and Supply-Chain Considerations](#dependencies-and-supply-chain-considerations)
+* [Architectural Decisions and Rationale](#architectural-decisions-and-rationale)
+* [Architecture Risks and Technical Debt](#architecture-risks-and-technical-debt)
+* [Architecture Evaluation](#architecture-evaluation)
+* [Traceability to Detailed Design and Testing](#traceability-to-detailed-design-and-testing)
+* [Open Issues](#open-issues)
+* [References](#references)
 
 ## Purpose and Scope
 
@@ -100,7 +102,7 @@ The capabilities are planning, generation, validation, evaluation, scoring, evol
 
 ### Module / Development View
 
-Planned package `src/slither_evolver/` contains `cli`, `config`, `orchestrator`, `budget`, `prompts`, `validation`, `evaluation`, `scoring`, `evolution`, `storage`, `reports`, `guided`, `replay`, `providers/`, and `runner/`. Domain logic depends on contracts, not provider SDKs. The current placeholder Python file does not implement these modules.
+Planned package `src/slither_evolver/` contains `cli`, `config`, `orchestrator`, `budget`, `prompts`, `validation`, `evaluation`, `scoring`, `evolution`, `storage`, `reports`, `guided`, `replay`, `providers/`, and `runner/`. Domain logic depends on contracts, not provider SDKs. The configuration and storage modules plus offline dispatch in `__main__.py` are implemented. The remaining modules are targets; the unused program template has been removed.
 
 ### Component-and-Connector / Runtime View
 
@@ -203,10 +205,10 @@ Operator selects provider/model/budget after pilot. Developer selects and verifi
 
 ## References
 
-- [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
-- [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
-- [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
-- [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
+* [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
+* [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
+* [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
+* [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
 
 <!--
 title: "Slither Sam Prompt Evolver | Software Architecture Description"
@@ -214,8 +216,8 @@ description: "Initial project baseline for software architecture description."
 document_type: "Software Architecture Description (SAD)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.0"
-updated: "2026-10-07T16:12:51-04:00"
+version: "0.1.2"
+updated: "2026-10-07T19:39:33-04:00"
 toc: true
 tags: ["architecture", "sad", "portfolio"]
 -->

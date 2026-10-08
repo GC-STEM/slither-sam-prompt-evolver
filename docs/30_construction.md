@@ -1,38 +1,38 @@
 # Slither Sam Prompt Evolver | Software Construction Plan
 
-**Document status:** Baseline revision 0.1.1. Configuration validation has implementation/test evidence; other planned capabilities remain unverified.
+**Document status:** Baseline revision 0.1.2. Configuration validation and local run storage have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
 
-- [Purpose and Scope](#purpose-and-scope)
-- [Construction Approach](#construction-approach)
-- [Development Environment](#development-environment)
-- [Source-Code Organization](#source-code-organization)
-- [Work Breakdown and Construction Order](#work-breakdown-and-construction-order)
-- [Integration Strategy](#integration-strategy)
-- [Version Control and Change Management](#version-control-and-change-management)
-- [Dependency and Supply-Chain Management](#dependency-and-supply-chain-management)
-- [Build and Packaging](#build-and-packaging)
-- [Construction Testing](#construction-testing)
-- [Code Review and Static Verification](#code-review-and-static-verification)
-- [Security During Construction](#security-during-construction)
-- [Construction Quality Gates](#construction-quality-gates)
-- [Automation and Continuous Integration](#automation-and-continuous-integration)
-- [Roles and Responsibilities](#roles-and-responsibilities)
-- [Milestones and Schedule](#milestones-and-schedule)
-- [Construction Measures and Progress Tracking](#construction-measures-and-progress-tracking)
-- [Construction Risks and Mitigations](#construction-risks-and-mitigations)
-- [Construction Deliverables](#construction-deliverables)
-- [Traceability and Handoff](#traceability-and-handoff)
-- [Open Issues](#open-issues)
-- [References](#references)
+* [Purpose and Scope](#purpose-and-scope)
+* [Construction Approach](#construction-approach)
+* [Development Environment](#development-environment)
+* [Source-Code Organization](#source-code-organization)
+* [Work Breakdown and Construction Order](#work-breakdown-and-construction-order)
+* [Integration Strategy](#integration-strategy)
+* [Version Control and Change Management](#version-control-and-change-management)
+* [Dependency and Supply-Chain Management](#dependency-and-supply-chain-management)
+* [Build and Packaging](#build-and-packaging)
+* [Construction Testing](#construction-testing)
+* [Code Review and Static Verification](#code-review-and-static-verification)
+* [Security During Construction](#security-during-construction)
+* [Construction Quality Gates](#construction-quality-gates)
+* [Automation and Continuous Integration](#automation-and-continuous-integration)
+* [Roles and Responsibilities](#roles-and-responsibilities)
+* [Milestones and Schedule](#milestones-and-schedule)
+* [Construction Measures and Progress Tracking](#construction-measures-and-progress-tracking)
+* [Construction Risks and Mitigations](#construction-risks-and-mitigations)
+* [Construction Deliverables](#construction-deliverables)
+* [Traceability and Handoff](#traceability-and-handoff)
+* [Open Issues](#open-issues)
+* [References](#references)
 
 ## Purpose and Scope
 
 ### Purpose
 
-Guide incremental implementation, integration, and evidence collection for the independent portfolio project. This is a construction plan. The [configuration validator](./11_configuration.md) and its [test evidence](./41_configuration_validation.md) form the first implemented part of W-02; the optimizer and runner remain planned.
+Guide incremental implementation, integration, and evidence collection for the independent portfolio project. This is a construction plan. The [configuration validator](./11_configuration.md) and [local evidence store](./12_local_storage.md) are implemented parts of W-02; [61 passing tests](./42_storage_validation.md) cover their offline contracts. Scoring/reporting and full recovery remain pending, so W-02 is not complete. The optimizer and runner remain planned.
 
 ### Construction Scope
 
@@ -91,14 +91,14 @@ Use descriptive snake_case Python names, consistent JavaScript names, small sing
 | `runs/` | Local generated artifacts and credentials-free evidence; raw runs excluded from ordinary commits. |
 | `docs/` | SDLC baseline, decisions, setup and final evidence summary. |
 
-These are target paths. The current repository's placeholder program/test files are not the completed structure.
+Configuration, storage, and offline command dispatch now exist with component tests. Other paths are targets. The unused program/test templates have been removed.
 
 ## Work Breakdown and Construction Order
 
 | Work Item | Increment / Prerequisites | Deliverable / Gate |
 | --- | --- | --- |
 | W-01 | Baseline review | Requirements/design decisions and unresolved pilot settings recorded. |
-| W-02 | Domain schemas, config, store, scorer | Offline fixture report; scoring and evidence tests pass. |
+| W-02 | Domain schemas, config, store, scorer | Partial: configuration and local prompt/sample storage verified; scorer, fixture report and full recovery pending. |
 | W-03 | Guided import and inert replay after W-02 | No-credentials demonstration with labeled fixtures; real data still pending. |
 | W-04 | Early game/API/clock/randomness spike | Original/adapted parity findings, profile version and known rule quirks. |
 | W-05 | Isolation and limits after W-04 | Capability/deadline tests pass before accepting generated source. |
@@ -228,10 +228,10 @@ Select exact packages/runtimes, provider/model/caps, pilot scale, and December d
 
 ## References
 
-- [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
-- [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
-- [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
-- [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
+* [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
+* [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
+* [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
+* [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
 
 <!--
 title: "Slither Sam Prompt Evolver | Software Construction Plan"
@@ -239,8 +239,8 @@ description: "Initial project baseline for software construction plan."
 document_type: "Software Construction Plan (SCP)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.1"
-updated: "2026-10-07T19:05:27-04:00"
+version: "0.1.2"
+updated: "2026-10-07T19:39:33-04:00"
 toc: true
 tags: ["construction", "implementation", "portfolio"]
 -->

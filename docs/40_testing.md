@@ -1,33 +1,33 @@
 # Slither Sam Prompt Evolver | Software Test Plan
 
-**Document status:** Baseline revision 0.1.1. Configuration validation has implementation/test evidence; other planned capabilities remain unverified.
+**Document status:** Baseline revision 0.1.2. Configuration validation and local run storage have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
 
-- [Purpose and Scope](#purpose-and-scope)
-- [Test Objectives](#test-objectives)
-- [Test Scope](#test-scope)
-- [Test Strategy](#test-strategy)
-- [Requirements Traceability](#requirements-traceability)
-- [Test Environment](#test-environment)
-- [Test Data](#test-data)
-- [Test Tools and Automation](#test-tools-and-automation)
-- [Test Case and Procedure Design](#test-case-and-procedure-design)
-- [Pass / Fail Criteria](#pass--fail-criteria)
-- [Entry, Suspension, Resumption, and Completion Criteria](#entry-suspension-resumption-and-completion-criteria)
-- [Defect and Test-Incident Management](#defect-and-test-incident-management)
-- [Regression and Retesting Strategy](#regression-and-retesting-strategy)
-- [Specialized Quality Testing](#specialized-quality-testing)
-- [Roles and Responsibilities](#roles-and-responsibilities)
-- [Test Schedule and Milestones](#test-schedule-and-milestones)
-- [Test Risks and Contingencies](#test-risks-and-contingencies)
-- [Test Metrics and Reporting](#test-metrics-and-reporting)
-- [Test Deliverables](#test-deliverables)
-- [Test Evidence and Reproducibility](#test-evidence-and-reproducibility)
-- [Approval and Release Recommendation](#approval-and-release-recommendation)
-- [Open Issues](#open-issues)
-- [References](#references)
+* [Purpose and Scope](#purpose-and-scope)
+* [Test Objectives](#test-objectives)
+* [Test Scope](#test-scope)
+* [Test Strategy](#test-strategy)
+* [Requirements Traceability](#requirements-traceability)
+* [Test Environment](#test-environment)
+* [Test Data](#test-data)
+* [Test Tools and Automation](#test-tools-and-automation)
+* [Test Case and Procedure Design](#test-case-and-procedure-design)
+* [Pass / Fail Criteria](#pass--fail-criteria)
+* [Entry, Suspension, Resumption, and Completion Criteria](#entry-suspension-resumption-and-completion-criteria)
+* [Defect and Test-Incident Management](#defect-and-test-incident-management)
+* [Regression and Retesting Strategy](#regression-and-retesting-strategy)
+* [Specialized Quality Testing](#specialized-quality-testing)
+* [Roles and Responsibilities](#roles-and-responsibilities)
+* [Test Schedule and Milestones](#test-schedule-and-milestones)
+* [Test Risks and Contingencies](#test-risks-and-contingencies)
+* [Test Metrics and Reporting](#test-metrics-and-reporting)
+* [Test Deliverables](#test-deliverables)
+* [Test Evidence and Reproducibility](#test-evidence-and-reproducibility)
+* [Approval and Release Recommendation](#approval-and-release-recommendation)
+* [Open Issues](#open-issues)
+* [References](#references)
 
 ## Purpose and Scope
 
@@ -37,7 +37,7 @@ Verify requirements and investigate whether the initial prototype/session increm
 
 ### System Under Test
 
-The planned local Python coordinator, provider/budget adapters, JavaScript runner, scoring/search, evidence store, guided import and inert replay. The configuration validator and its 26 implementation tests now exist; [execution evidence](./41_configuration_validation.md) records that increment. The original placeholder files remain templates; other components are planned.
+The target system includes a local Python coordinator, provider/budget adapters, JavaScript runner, scoring/search, evidence store, guided import and inert replay. Configuration validation and local prompt/sample storage now exist; [61 passing component tests](./42_storage_validation.md) record their evidence. The unused program/test templates have been removed. Other components and full system procedures remain planned.
 
 ### Test Basis
 
@@ -160,13 +160,13 @@ Select/pin Python and JavaScript test tools during construction. Automate unit/c
 
 ## Test Case and Procedure Design
 
-Common preconditions: implemented component at a recorded commit; compatible fixture schema; offline mode unless the procedure explicitly requires controlled game/live execution. Runner misuse/parity cases require the isolated environment. TC-001 configuration assertions have executed successfully; its full run-manifest/execution-gating integration remains pending. All other case procedures remain **Not run**. Detailed automation can later refine these procedures without changing their IDs or expected behavior.
+Common preconditions: implemented component at a recorded commit; compatible fixture schema; offline mode unless the procedure explicitly requires controlled game/live execution. Runner misuse/parity cases require the isolated environment. TC-001 validation and local manifest assertions have passed. Local storage assertions also provide partial evidence for TC-002, TC-003, TC-021, and TC-024. Their broader coordinator/live-generation/checkpoint procedures remain pending; all other system procedures remain **Not run**. See [the 61-test execution record](./42_storage_validation.md). Detailed automation can later refine these procedures without changing their IDs or expected behavior.
 
 | Test ID | Objective / Requirement | Preconditions | Inputs / Steps | Expected Result | Automation |
 | --- | --- | --- | --- | --- | --- |
-| `TC-001` | `FR-001` | Implemented component + versioned fixtures | Unknown key, zero sample count, overlapping seed sets, and missing budget in live configuration. | Reject before network or code execution; valid configuration produces a normalized manifest. | Validation assertions passed; manifest/gating integration pending; see [evidence](./41_configuration_validation.md) |
-| `TC-002` | `FR-002` | Implemented component + versioned fixtures | Invoke help and each planned command with a small fixture bundle. | Each command performs only its declared workflow; offline modes have no provider calls. | Planned automated; Not run |
-| `TC-003` | `FR-003` | Implemented component + versioned fixtures | Change a strategy prompt, then attempt to change frozen API/model/system context on resume. | Prompt changes are versioned; incompatible resume is rejected and baseline hash is unchanged. | Planned automated; Not run |
+| `TC-001` | `FR-001` | Implemented component + versioned fixtures | Unknown key, zero sample count, overlapping seed sets, and missing budget in live configuration. | Reject before network or code execution; valid configuration produces a normalized manifest. | Validation and local manifest assertions passed; execution gating pending; see [storage evidence](./42_storage_validation.md) |
+| `TC-002` | `FR-002` | Implemented component + versioned fixtures | Invoke help and each planned command with a small fixture bundle. | Each command performs only its declared workflow; offline modes have no provider calls. | validate/init/inspect assertions passed; planned experiment commands Not run |
+| `TC-003` | `FR-003` | Implemented component + versioned fixtures | Change a strategy prompt, then attempt to change frozen API/model/system context on resume. | Prompt changes are versioned; incompatible resume is rejected and baseline hash is unchanged. | Baseline/lineage and incompatible store-open assertions passed; scheduler resume Not run |
 | `TC-004` | `FR-004` | Implemented component + versioned fixtures | Initialize population twice with identical search seed; generate mutation and crossover children. | Population and lineage match; exact duplicates are rejected after bounded retries. | Planned automated; Not run |
 | `TC-005` | `FR-005` | Implemented component + versioned fixtures | Use a fake provider returning K distinct responses and a replacement fake adapter. | Exactly K samples are recorded per prompt; provider replacement preserves contract and metadata. | Planned automated; Not run |
 | `TC-006` | `FR-006` | Implemented component + versioned fixtures | Submit valid fenced code, prose-only output, missing playerAI, oversized source, and invalid return. | Only compatible outputs proceed; failures retain reason and raw response without silent repair. | Planned automated; Not run |
@@ -184,10 +184,10 @@ Common preconditions: implemented component at a recorded commit; compatible fix
 | `TC-018` | `FR-018` | Implemented component + versioned fixtures | Run pilot planning with costs known, unknown, just within cap, and one request beyond cap. | Estimates include independent samples and retries; unknown upper bound blocks live work; over-cap request rejected. | Planned automated; Not run |
 | `TC-019` | `FR-019` | Implemented component + versioned fixtures | Inject model syntax failure, bot exception, provider timeout, and runner crash. | Bot failures score as defined; infrastructure faults block completion and never become artificial losses. | Planned automated; Not run |
 | `TC-020` | `FR-020` | Controlled runner environment | Have a bot send forged victory records, mutate its snapshot, and return an invalid direction. | Trusted game ignores forged outcomes and mutated copies; invalid action is a bot failure; host state remains unchanged. | Planned automated; Not run |
-| `TC-021` | `FR-021` | Implemented component + versioned fixtures | Change one artifact byte and remove required model metadata. | Hash mismatch or missing required provenance is reported; the bundle cannot be treated as verified. | Planned automated; Not run |
+| `TC-021` | `FR-021` | Implemented component + versioned fixtures | Change one artifact byte and remove required model metadata. | Hash mismatch or missing required provenance is reported; the bundle cannot be treated as verified. | Local artifact/catalog/metadata assertions passed; full live-generation provenance Not run |
 | `TC-022` | `FR-022` | Implemented component + versioned fixtures | Freeze winning prompt, generate fresh holdout bot samples for it and baseline, export comparison. | Same schedules and sample counts; fresh-sample evidence is separate from optimization evidence; no improvement claim without data. | Planned automated; Not run |
 | `TC-023` | `NFR-001` | Implemented component + versioned fixtures | Reserve costs for an in-flight request, uncertain timeout, and retry. | Each request has its own reservation; uncertain cost is not released; total committed bound never exceeds cap. | Planned automated; Not run |
-| `TC-024` | `NFR-002` | Implemented component + versioned fixtures | Interrupt writes at manifest, event, and checkpoint boundaries and attempt repeated resume. | Atomic replacement or recovery yields one valid state; no duplicate slots and no automatic reissue of uncertain paid calls. | Planned automated; Not run |
+| `TC-024` | `NFR-002` | Implemented component + versioned fixtures | Interrupt writes at manifest, event, and checkpoint boundaries and attempt repeated resume. | Atomic replacement or recovery yields one valid state; no duplicate slots and no automatic reissue of uncertain paid calls. | Injected initialization/flush/record/catalog fault assertions passed; process-kill/event/checkpoint/resume procedures Not run |
 | `TC-025` | `NFR-003` | Controlled runner environment | Attempt file, network, credential, dynamic-import, and infinite-loop access in the disposable execution environment. | Forbidden capabilities unavailable; infinite loop terminated; no host secret in environment or exported artifact. | Planned automated; Not run |
 | `TC-026` | `NFR-004` | Implemented component + versioned fixtures | Place a synthetic credential marker and a participant email in an export fixture. | Export blocks forbidden fields/markers; safe fixture exports; no real credentials used in tests. | Planned automated; Not run |
 | `TC-027` | `NFR-005` | Implemented component + versioned fixtures | Navigate help/reports by keyboard and inspect plain-text reports with a screen reader. | Commands explain recovery; report tables have headings and textual outcomes; visuals are supplementary. | Manual + automated checks; Not run |
@@ -275,7 +275,7 @@ Report planned/executed/passed/failed/blocked/Not run counts, defect severity, s
 
 ## Test Deliverables
 
-This plan, implemented tests/fixtures, environment/version manifest, execution records, defect reports, raw/aggregate result bundle, actual usage/cost records, guided/replay rehearsal evidence, and a test completion report with recommendation and limitations. A [passing configuration-only report](./41_configuration_validation.md) exists. No completed system acceptance report is claimed.
+This plan, implemented tests/fixtures, environment/version manifest, execution records, defect reports, raw/aggregate result bundle, actual usage/cost records, guided/replay rehearsal evidence, and a test completion report with recommendation and limitations. Passing [configuration](./41_configuration_validation.md) and [local storage](./42_storage_validation.md) execution records exist. No completed system acceptance report is claimed.
 
 ## Test Evidence and Reproducibility
 
@@ -287,14 +287,14 @@ The project owner reviews executed evidence against AC-01–AC-06. Recommend acc
 
 ## Open Issues
 
-Implement tests; select runtime/tool versions and isolation strategy; select pilot settings/caps; confirm session date; obtain real recorded results. Only TC-001 validation assertions have been executed so far; its integration portions and all other cases remain pending/Not run. The requirement/design baseline can be reviewed now without implying later quality gates have passed.
+Implement tests; select runtime/tool versions and isolation strategy; select pilot settings/caps; confirm session date; obtain real recorded results. Validation, local manifest, frozen-context, integrity, and injected storage-fault assertions have executed. Their partial mapping to TC-001/002/003/021/024 is recorded above; full coordinator and system procedures remain pending/Not run. The requirement/design baseline can be reviewed now without implying later quality gates have passed.
 
 ## References
 
-- [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
-- [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
-- [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
-- [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
+* [Project repository](https://github.com/GC-STEM/slither-sam-prompt-evolver), inspected at commit `59536cf1030fd9ba04e893d046e317d8531b6529` on October 7, 2026.
+* [Repository SDLC templates](https://github.com/GC-STEM/slither-sam-prompt-evolver/tree/59536cf1030fd9ba04e893d046e317d8531b6529/docs), adapted for this independent portfolio project.
+* [Slither Slam activity](https://aka.ms/slither-slam) and [educator resources](https://aka.ms/slither-slam-educator), original learning resources.
+* [Bundled course and game source](https://github.com/GC-STEM/slither-sam-prompt-evolver/blob/59536cf1030fd9ba04e893d046e317d8531b6529/index.yml), including the model's system instructions, Snake helpers, game rules, opponents, and browser dependencies.
 
 <!--
 title: "Slither Sam Prompt Evolver | Software Test Plan"
@@ -302,8 +302,8 @@ description: "Initial project baseline for software test plan."
 document_type: "Software Test Plan (STP)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.1"
-updated: "2026-10-07T19:05:27-04:00"
+version: "0.1.2"
+updated: "2026-10-07T19:39:33-04:00"
 toc: true
 tags: ["testing", "stp", "portfolio"]
 -->

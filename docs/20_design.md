@@ -1,6 +1,6 @@
 # Slither Sam Prompt Evolver | Software Design Description
 
-**Document status:** Baseline revision 0.1.1. Configuration validation has implementation/test evidence; other planned capabilities remain unverified.
+**Document status:** Baseline revision 0.1.2. Configuration validation and local run storage have implementation/test evidence; other capabilities and full system acceptance remain unverified.
 
 <!-- omit from toc -->
 ## Table of Contents
@@ -214,11 +214,11 @@ Persist provenance and produce recalculable reports. Traces: FR-013–FR-014, FR
 
 #### Public Interface
 
-append_event(record); checkpoint(state); verify_bundle(path) → Findings; export(run_id) → ReportPaths.
+Implemented: RunStore.create/open, add_prompt/get_prompt, add_sample/get_sample, manifest, and verify; see [the storage contract](./12_local_storage.md). Planned: append_event(record), checkpoint(state), full verify_bundle, and report export.
 
 #### Internal Structure
 
-One-writer append-only events, atomic snapshots, artifact hash index and pure report builder.
+Implemented: exclusive per-run writer lock, frozen configuration/manifest, immutable hashed text/record files, and an atomic catalog of prompt/sample IDs and hashes. The catalog detects deleted records. Append-only events, checkpoints and the pure report builder remain planned.
 
 #### Dependencies
 
@@ -226,7 +226,7 @@ Local filesystem, schema definitions, scorer; no live provider during report.
 
 #### Algorithms and Logic
 
-Reject duplicate terminal IDs; verify hashes; escape markup; separate actual, synthetic, manual, and partial evidence.
+Implemented storage rejects conflicting IDs and duplicate sample slots/request IDs, verifies local hashes and lineage, and requires declared synthetic/manual/automated provenance. Interrupted publication blocks inspection when completion cannot be established. Terminal match IDs, escaped report markup and experimental-result separation remain future integrations.
 
 #### Data Used or Produced
 
@@ -287,7 +287,7 @@ A Run owns a frozen configuration and profile. A Prompt owns strategy text and l
 
 ### Persistent Storage
 
-Use `runs/<run_id>/` with manifest/configuration JSON, immutable prompt/source/response artifacts, append-only `requests.jsonl`, `events.jsonl`, `slots.jsonl`, atomic `checkpoint.json`, trusted replay traces, and derived reports. Files are UTF-8. Artifact hashes identify exact content; new scoring versions create new reports rather than rewriting raw records.
+Implemented `runs/<run_id>/` contains manifest/configuration JSON, an atomic `catalog.json`, immutable `prompts/` and `samples/` JSON records, and exact text in content-addressed `artifacts/`. Each record is bound to the frozen manifest. Provenance labels are required; SHA-256 is integrity checking, not authentication. Initialization publishes the manifest last; record publication commits through the catalog. Uncommitted records and stale locks block verification without automatic repair. Planned additions are append-only `requests.jsonl`, `events.jsonl`, `slots.jsonl`, atomic `checkpoint.json`, trusted replay traces, and derived reports. Files are UTF-8. Artifact hashes identify exact content; new scoring versions create new reports rather than rewriting raw records.
 
 ### Data Flow and Transformation
 
@@ -297,7 +297,7 @@ Operator inputs become normalized configuration and a manifest. Provider respons
 
 ### User Interface Design
 
-Proposed command family: `python -m slither_evolver pilot --config PATH`, `evolve --config PATH`, `guided --input PATH --manifest PATH`, `replay --run PATH`, `report --run PATH`, and `resume --run PATH`. Each supports help. `pilot` plans work offline by default; explicit `--live` permits bounded generation when required settings exist. These experiment commands are targets for implementation. The first implemented command is `python -m slither_evolver validate --config PATH [--live]`; see [the configuration contract](./11_configuration.md). Validation does not start live work.
+Proposed command family: `python -m slither_evolver pilot --config PATH`, `evolve --config PATH`, `guided --input PATH --manifest PATH`, `replay --run PATH`, `report --run PATH`, and `resume --run PATH`. Each supports help. `pilot` plans work offline by default; explicit `--live` permits bounded generation when required settings exist. These experiment commands are targets for implementation. The first implemented command is `python -m slither_evolver validate --config PATH [--live]`; see [the configuration contract](./11_configuration.md). Implemented `init --config PATH --provenance KIND --description TEXT [--runs-dir PATH]` creates local evidence and `inspect --run PATH` verifies it. Neither command starts live work. All three offline commands are covered by tests; storage faults return exit 4.
 
 Exit statuses: 0 completed requested workflow; 2 invalid input; 3 missing dependency/isolation prerequisite; 4 external service/infrastructure failure; 5 bounded or operator stop. Messages identify what was saved and a recovery action. Report replay uses inert content only. Visual match watching is a separate trusted viewer workflow and may run only after execution isolation is verified.
 
@@ -378,7 +378,7 @@ Ports/adapters for provider and runner; immutable value records for manifests; s
 
 ## Design Verification and Traceability
 
-The requirement-to-module/test mapping in [Requirements](./10_requirements.md#requirements-traceability) is authoritative. Component sections above identify requirement groups. Scorer/search tests cover normal, boundary and failure cases; runner tests cover helper/rule parity and isolation; storage tests cover interruption and ambiguity. All planned tests are specified in [Testing](./40_testing.md).
+The requirement-to-module/test mapping in [Requirements](./10_requirements.md#requirements-traceability) is authoritative. Component sections above identify requirement groups. Scorer/search tests cover normal, boundary and failure cases; runner tests cover helper/rule parity and isolation; local storage tests cover injected publication/flush failures and incompatible context; paid-request ambiguity and full interruption/recovery tests remain planned. All planned tests are specified in [Testing](./40_testing.md).
 
 ## Open Issues and Deferred Design Work
 
@@ -397,8 +397,8 @@ description: "Initial project baseline for software design description."
 document_type: "Software Design Description (SDD)"
 owner: "GC-STEM, Computer Science"
 scope: "slither-sam-prompt-evolver"
-version: "0.1.1"
-updated: "2026-10-07T19:05:27-04:00"
+version: "0.1.2"
+updated: "2026-10-07T19:39:33-04:00"
 toc: true
 tags: ["design", "sdd", "portfolio"]
 -->
